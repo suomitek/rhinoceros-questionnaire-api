@@ -11,16 +11,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | $config['root_path'] = '/api/'; // 结尾请不要带 / ，对应 CI 框架主入口文件, 即 index.php 所在目录
 | $config['mail_from'] = 'no-reply@webmaster.com'; // 邮件的发件人
 | $config['poster_name'] = '网站管理员'; // 邮件的发件人的名称
-| $config['php_path'] = '/Applications/MAMP/bin/php/php7.1.20/bin/php'; // php所在路径，可通过 bash 执行 which php 查看
+| $config['php_path'] = '/usr/local/bin/php'; // php所在路径，可通过 bash 执行 which php 查看
 */
 
 $config['sleep_time'] = 2;
 $config['limit'] = 1000;
-$config['site_url'] = 'http://localhost:9090';
+$config['site_url'] = 'http://101.200.34.227:8090/';
 $config['root_path'] = '/api/';
-$config['mail_from'] = 'contact@52admin.net';
+$config['mail_from'] = 'contact@suomitek.com';
 $config['poster_name'] = '网站管理员';
-$config['php_path'] = '/Applications/MAMP/bin/php/php7.1.20/bin/php';
+$config['php_path'] = '/usr/local/bin/php';
 
 
 /*
