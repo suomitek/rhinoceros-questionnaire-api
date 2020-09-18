@@ -42,7 +42,7 @@ location / {
 docker-compose up -d
 ```
 
-> 后端代码努力重构中...
+> 重构
 
 ## 鼓励
 
