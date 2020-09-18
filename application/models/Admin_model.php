@@ -43,7 +43,8 @@ class Admin_model extends CI_Model {
         }
 
         $data = array(
-            'a_password' => sha1($newpwd)
+            'a_password' => sha1($newpwd),
+			'update_time' => time(),
         );
         $this->db->where('admin_id', $userid);
         $this->db->update('admin', $data);
