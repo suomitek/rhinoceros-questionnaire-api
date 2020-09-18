@@ -22,10 +22,10 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- ----------------------------
 DROP TABLE IF EXISTS `admin`;
 CREATE TABLE `admin` (
-  `a_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '管理员ID',
+  `admin_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '管理员ID',
   `a_username` varchar(25) NOT NULL COMMENT '用户名',
   `a_password` varchar(40) NOT NULL COMMENT '密码',
-  PRIMARY KEY (`a_id`)
+  PRIMARY KEY (`admin_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='管理员表';
 
 -- ----------------------------
@@ -74,7 +74,7 @@ COMMIT;
 DROP TABLE IF EXISTS `naire`;
 CREATE TABLE `naire` (
   `naire_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '问卷id',
-  `a_id` bigint(20) NOT NULL COMMENT '管理员id',
+  `admin_id` bigint(20) NOT NULL COMMENT '管理员id',
   `n_creattime` varchar(14) NOT NULL COMMENT '创建时间',
   `n_deadline` varchar(14) NOT NULL COMMENT '截止时间',
   `n_title` varchar(255) NOT NULL COMMENT '问卷标题',

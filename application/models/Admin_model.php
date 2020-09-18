@@ -19,7 +19,7 @@ class Admin_model extends CI_Model {
         $query = $this->db->get_where('admin', $where_array);
         // 用户名密码正确后，生成token，返回给前台
         if ($query->num_rows() > 0) {
-            return $query->first_row()->a_id;
+            return $query->first_row()->admin_id;
         } else {
             return false;
         }
@@ -29,7 +29,7 @@ class Admin_model extends CI_Model {
     public function changePwd($userid) {
         $oldpwd = json_decode($this->input->raw_input_stream, true)['oldpwd'];
         $newpwd = json_decode($this->input->raw_input_stream, true)['newpwd'];
-        $where_array = array('a_id' => $userid, 'a_password' => sha1($oldpwd));
+        $where_array = array('admin_id' => $userid, 'a_password' => sha1($oldpwd));
         $query = $this->db->get_where('admin', $where_array);
         if (!$query) {
             $error = 1; // ERROR
@@ -44,7 +44,7 @@ class Admin_model extends CI_Model {
         $data = array(
             'a_password' => sha1($newpwd)
         );
-        $this->db->where('a_id', $userid);
+        $this->db->where('admin_id', $userid);
         $this->db->update('admin', $data);
         $result = $this->db->affected_rows();
         return array('err' => $error, "data" => $result);
