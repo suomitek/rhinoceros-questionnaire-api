@@ -82,9 +82,9 @@ class Queue
             return false;
         }
         if (empty($task_id)) {
-            $sql = "SELECT * from task, users, naire WHERE users.user_id = task.user_id AND naire.n_id = task.naire_id AND task.task_status = 0 AND users.u_email != '' ORDER BY task.task_createtime ASC " . " LIMIT 0 , " . $take_num;
+            $sql = "SELECT * from task, users, naire WHERE users.user_id = task.user_id AND naire.naire_id = task.naire_id AND task.task_status = 0 AND users.u_email != '' ORDER BY task.task_createtime ASC " . " LIMIT 0 , " . $take_num;
         } else {
-            $sql = "SELECT * from task, users, naire WHERE users.user_id = task.user_id AND naire.n_id = task.naire_id AND task.task_status = 0 AND users.u_email != '' AND task.task_id in (". $task_id .") ORDER BY task.task_createtime ASC";
+            $sql = "SELECT * from task, users, naire WHERE users.user_id = task.user_id AND naire.naire_id = task.naire_id AND task.task_status = 0 AND users.u_email != '' AND task.task_id in (". $task_id .") ORDER BY task.task_createtime ASC";
         }
         $tasks = $this->_ci->db
             ->query($sql)

@@ -12,16 +12,16 @@ class Naire_model extends CI_Model {
 	public function get_naires() {
 		// 获取参数 naire id
 		// JSON 反序列化
-		$n_id = json_decode($this->input->raw_input_stream, true)['n_id'];
+		$n_id = json_decode($this->input->raw_input_stream, true)['naire_id'];
 
 		if (empty($n_id)) {
 			return array("err" => 1, "data" => "请传入参数值");
 		}
-		$naire = $this->db->query("select * from naire where naire.n_id = {$n_id}")
+		$naire = $this->db->query("select * from naire where naire.naire_id = {$n_id}")
 			->result_array();
-		$questions = $this->db->query("select * from question where question.n_id = {$n_id}")
+		$questions = $this->db->query("select * from question where question.naire_id = {$n_id}")
 			->result_array();
-		$options = $this->db->query("select * from options where options.n_id = {$n_id}")
+		$options = $this->db->query("select * from options where options.naire_id = {$n_id}")
 			->result_array();
 
 //		echo var_dump($naire);
@@ -31,7 +31,7 @@ class Naire_model extends CI_Model {
 			return array("err" => 1, "data" => "未获取到相应问卷");
 		}
 		$result = array(
-			"n_id" => $naire[0]["n_id"],
+			"naire_id" => $naire[0]["naire_id"],
 			"title" => $naire[0]["n_title"],
 			"creattime" => $naire[0]["n_creattime"],
 			"deadline" => $naire[0]["n_deadline"],
@@ -135,7 +135,7 @@ class Naire_model extends CI_Model {
 				$insert_question_data = array(
 					'q_content' => trim($topicval['question']),
 					'q_type' => $topicval['type'],
-					'n_id' => $naire_id,
+					'naire_id' => $naire_id,
 					'q_setting' => array_key_exists('setting', $topicval) ? json_encode($topicval['setting']) : '',
 					'q_isrequire' => $topicval['isRequired'] == "true" ? 1 : 0,
 					'q_description' => trim($topicval['description'])
@@ -153,7 +153,7 @@ class Naire_model extends CI_Model {
 						}
 						$insert_option_data = array(
 							'o_value' => trim($optionval['content']),
-							'n_id' => $naire_id,
+							'naire_id' => $naire_id,
 							'q_id' => $question_id,
 							'o_image' => trim($optionval['image']),
 							'o_desc' => trim($optionval['desc']),
@@ -183,13 +183,13 @@ class Naire_model extends CI_Model {
 				'n_creattime' => utils_helper::getMillisecond()
 			);
 
-			$naire_id = $naire['n_id'];
-			$this->db->where('n_id', $naire_id);
+			$naire_id = $naire['naire_id'];
+			$this->db->where('naire_id', $naire_id);
 			$this->db->update('naire', $update_naire_data);
 
 			// 删除原有数据
 			$del_tables = array('question', 'options', 'submit_log', 'result');
-			$this->db->where('n_id', $naire_id);
+			$this->db->where('naire_id', $naire_id);
 			$this->db->delete($del_tables);
 
 			// 遍历题目
@@ -203,7 +203,7 @@ class Naire_model extends CI_Model {
 				$insert_question_data = array(
 					'q_content' => trim($topicval['question']),
 					'q_type' => $topicval['type'],
-					'n_id' => $naire_id,
+					'naire_id' => $naire_id,
 					'q_setting' => array_key_exists('setting', $topicval) ? json_encode($topicval['setting']) : '',
 					'q_isrequire' => $topicval['isRequired'] == "true" ? 1 : 0,
 					'q_description' => trim($topicval['description'])
@@ -221,7 +221,7 @@ class Naire_model extends CI_Model {
 						}
 						$insert_option_data = array(
 							'o_value' => trim($optionval['content']),
-							'n_id' => $naire_id,
+							'naire_id' => $naire_id,
 							'q_id' => $question_id,
 							'o_image' => trim($optionval['image']),
 							'o_desc' => trim($optionval['desc']),
@@ -250,7 +250,7 @@ class Naire_model extends CI_Model {
 		// 对问卷可提交时间做判断，以服务器的时间为准
 		$this->db->trans_start();
 
-		$naire_detail = $this->db->where('n_id', $n_id)->get('naire')->row();
+		$naire_detail = $this->db->where('naire_id', $n_id)->get('naire')->row();
 		$cur_time = (int)(microtime(true) * 1000);
 		if ($naire_detail->n_deadline <= $cur_time) {
 			return array("err" => 1, "message" => '问卷提交失败，非可提交时间。');
@@ -259,7 +259,7 @@ class Naire_model extends CI_Model {
 		$values = [];
 
 		foreach ($result as $key => $val) {
-			//	[n_id] => 12
+			//	[naire_id] => 12
 			//  [q_id] => 41
 			//  [o_id] => 52
 			//  [o_addition] =>
@@ -268,7 +268,7 @@ class Naire_model extends CI_Model {
 			if (is_array($val['o_id'])) {
 				foreach ($val['o_id'] as $o_key => $o_val) {
 					$values[] = array(
-						'n_id' => $val['n_id'],
+						'naire_id' => $val['naire_id'],
 						'user_id' => $val['user_id'],
 						'q_id' => $val['q_id'],
 						'o_id' => $o_val,
@@ -277,7 +277,7 @@ class Naire_model extends CI_Model {
 				}
 			} else {
 				$values[] = array(
-					'n_id' => $val['n_id'],
+					'naire_id' => $val['naire_id'],
 					'user_id' => $val['user_id'],
 					'q_id' => $val['q_id'],
 					'o_id' => is_null($val['o_id']) ? '' : $val['o_id'],
@@ -290,7 +290,7 @@ class Naire_model extends CI_Model {
 
 		// 记录问卷填写日志表
 		$option_data = array(
-			'n_id' => $n_id,
+			'naire_id' => $n_id,
 			'user_id' => $user_id,
 			's_creattime' => $cur_time
 		);
@@ -306,10 +306,10 @@ class Naire_model extends CI_Model {
 
 	// 删除问卷
 	public function del_naire() {
-		$n_id = $this->input->post_get('n_id', TRUE);
+		$n_id = $this->input->post_get('naire_id', TRUE);
 		// 删除多表中的数据
 		$del_tables = array('naire', 'question', 'options', 'result', 'submit_log');
-		$this->db->where_in('n_id', explode(',', $n_id));
+		$this->db->where_in('naire_id', explode(',', $n_id));
 		$this->db->delete($del_tables);
 
 		// 同时清空任务表
@@ -318,7 +318,7 @@ class Naire_model extends CI_Model {
 
 		$result = $this->db->affected_rows() + $rows;
 
-//		$this->db->query("DELETE FROM naire, question, options, result  WHERE n_id={$n_id}");
+//		$this->db->query("DELETE FROM naire, question, options, result  WHERE naire_id={$n_id}");
 //		$rows = $this->db->affected_rows();
 
 		return array('err' => 0, "data" => $result);
@@ -328,16 +328,16 @@ class Naire_model extends CI_Model {
 	public function statis_naire() {
 		// 获取参数 naire id
 		// JSON 反序列化
-		$n_id = json_decode($this->input->raw_input_stream, true)['n_id'];
+		$n_id = json_decode($this->input->raw_input_stream, true)['naire_id'];
 
 		if ($n_id == '') {
 			return array("err" => 1, "data" => "请传入参数值");
 		}
-		$naire = $this->db->query("select * from naire where naire.n_id = {$n_id}")
+		$naire = $this->db->query("select * from naire where naire.naire_id = {$n_id}")
 			->result_array();
-		$questions = $this->db->query("select * from question where question.n_id = {$n_id}")
+		$questions = $this->db->query("select * from question where question.naire_id = {$n_id}")
 			->result_array();
-		$options = $this->db->query("select * from options where options.n_id = {$n_id}")
+		$options = $this->db->query("select * from options where options.naire_id = {$n_id}")
 			->result_array();
 
 //		echo var_dump($naire);
@@ -348,14 +348,14 @@ class Naire_model extends CI_Model {
 		}
 		// 先遍历 问卷表，拿到问卷id
 		$result["naire"] = array(
-			"n_id" => $naire[0]["n_id"],
+			"naire_id" => $naire[0]["naire_id"],
 			"title" => $naire[0]["n_title"],
 			"creattime" => $naire[0]["n_creattime"],
 			"deadline" => $naire[0]["n_deadline"],
 			"status" => $naire[0]["n_status"],
 			"intro" => $naire[0]["n_intro"]
 		);
-		$joinCountQuery = $this->db->query("SELECT * FROM result WHERE result.n_id = {$n_id} GROUP BY result.user_id");
+		$joinCountQuery = $this->db->query("SELECT * FROM result WHERE result.naire_id = {$n_id} GROUP BY result.user_id");
 		$joinCount = $joinCountQuery->num_rows(); // 投票总人数
 
 		// 再遍历题目表，拿到题目id，去遍历选项表
@@ -366,9 +366,9 @@ class Naire_model extends CI_Model {
 			$addtionContent = []; // 附加理由
 			// 用于图表显示
 			// 查询该题目总调查人数
-			// select *,count(*) as total from result where n_id = {$naire[0]["n_id"]} and q_id = {$questionval["q_id"]} group by q_id
+			// select *,count(*) as total from result where naire_id = {$naire[0]["naire_id"]} and q_id = {$questionval["q_id"]} group by q_id
 			$total = 0;
-			$totalResult = $this->db->query("select *,count(*) as total from result where n_id = {$naire[0]['n_id']} and q_id = {$questionval['q_id']} group by q_id");
+			$totalResult = $this->db->query("select *,count(*) as total from result where naire_id = {$naire[0]['naire_id']} and q_id = {$questionval['q_id']} group by q_id");
 
 			if ($totalResult->num_rows() > 0) {
 				$total = $totalResult->result_array()[0]["total"];
@@ -381,14 +381,14 @@ class Naire_model extends CI_Model {
 				if ($questionval['q_id'] == $optionval['q_id']) {
 
 					// 查询每个选项在数据库中的个数
-					// select *,count(*) as total from result where n_id = {$naire[0]['n_id']} and q_id = {$questionval['q_id']} and o_id = {$optionval['o_id']}
-					$count = $this->db->query("select *,count(*) as total from result where n_id = {$naire[0]['n_id']} and q_id = {$questionval['q_id']} and o_id = {$optionval['o_id']}")->result_array()[0]["total"];
+					// select *,count(*) as total from result where naire_id = {$naire[0]['naire_id']} and q_id = {$questionval['q_id']} and o_id = {$optionval['o_id']}
+					$count = $this->db->query("select *,count(*) as total from result where naire_id = {$naire[0]['naire_id']} and q_id = {$questionval['q_id']} and o_id = {$optionval['o_id']}")->result_array()[0]["total"];
 					$charts[] = $count;
 					$percent = $count > 0 ? round(($count / $joinCount * 100), 2) : 0;
 					// 查询附加理由的内容
-					// select * from result, options where result.n_id = {$naire[0]['n_id']} and result.o_id and options.o_id and result.q_id = {$questionval['q_id']}  and options.o_isaddtion = {$optionval['o_id']}
+					// select * from result, options where result.naire_id = {$naire[0]['naire_id']} and result.o_id and options.o_id and result.q_id = {$questionval['q_id']}  and options.o_isaddtion = {$optionval['o_id']}
 
-					$addtionData = $this->db->query("select * from result, options where result.n_id = {$naire[0]['n_id']} and result.o_id = options.o_id and result.q_id = {$questionval['q_id']}  and options.o_isaddtion = 1 and result.o_id = {$optionval['o_id']}")->result_array();
+					$addtionData = $this->db->query("select * from result, options where result.naire_id = {$naire[0]['naire_id']} and result.o_id = options.o_id and result.q_id = {$questionval['q_id']}  and options.o_isaddtion = 1 and result.o_id = {$optionval['o_id']}")->result_array();
 					foreach ($addtionData as $addtionitem => $addtionval) {
 						if ($addtionval["o_addtion"] != "") {
 //							print_r($addtionval["o_addtion"]);
@@ -439,7 +439,7 @@ class Naire_model extends CI_Model {
 			} else if ($questionval["q_type"] == '文本') {
 				// 拿问答题提交内容
 				$answerList = [];
-				$answerData = $this->db->query("select * from result,users where n_id = {$naire[0]["n_id"]} and q_id = {$questionval["q_id"]} and result.user_id = users.user_id")->result_array();
+				$answerData = $this->db->query("select * from result,users where naire_id = {$naire[0]["naire_id"]} and q_id = {$questionval["q_id"]} and result.user_id = users.user_id")->result_array();
 				foreach ($answerData as $item => $val) {
 //					print_r($val["o_addtion"]);
 					$answerList[] = array(
@@ -469,15 +469,15 @@ class Naire_model extends CI_Model {
 	public function get_questions() {
 		// 获取参数 naire id
 		// JSON 反序列化
-		$n_id = json_decode($this->input->raw_input_stream, true)['n_id'];
+		$n_id = json_decode($this->input->raw_input_stream, true)['naire_id'];
 
 		if ($n_id == '') {
 			return array("err" => 1, "data" => "请传入参数值");
 		}
 		// 问卷信息
-		$naire = $this->db->query("select * from naire where naire.n_id = {$n_id}")
+		$naire = $this->db->query("select * from naire where naire.naire_id = {$n_id}")
 			->result_array();
-		$questions = $this->db->query("select q_id as value, q_content as label from question where question.n_id = {$n_id} and (question.q_type = '单选' or question.q_type = '多选')")
+		$questions = $this->db->query("select q_id as value, q_content as label from question where question.naire_id = {$n_id} and (question.q_type = '单选' or question.q_type = '多选')")
 			->result_array();
 
 		if (empty($naire)) {
@@ -486,7 +486,7 @@ class Naire_model extends CI_Model {
 
 		// 问卷信息 先遍历 问卷表，拿到问卷id
 		$result["naire"] = array(
-			"n_id" => $naire[0]["n_id"],
+			"naire_id" => $naire[0]["naire_id"],
 			"title" => $naire[0]["n_title"],
 			"creattime" => $naire[0]["n_creattime"],
 			"deadline" => $naire[0]["n_deadline"],
@@ -516,7 +516,7 @@ class Naire_model extends CI_Model {
 //        $ss = $GLOBALS['HTTP_RAW_POST_DATA'];
 //        $ss = json_decode($ss,true);
 //        var_dump($ss);exit;
-		$n_id = json_decode($this->input->raw_input_stream, true)['n_id'];
+		$n_id = json_decode($this->input->raw_input_stream, true)['naire_id'];
 		$x_id = json_decode($this->input->raw_input_stream, true)['x_id'];
 		$y_id = json_decode($this->input->raw_input_stream, true)['y_id'];
 
@@ -531,7 +531,7 @@ class Naire_model extends CI_Model {
 		$table_row = $this->db->query("select * from options where options.q_id = {$x_id}")
 			->result_array();
 
-		$cross_result = $this->db->query("select t1.o_value as x_value, t1.o_id as x_id,t2.o_id as y_id, count(*) as count from (select result.user_id, result.q_id, result.o_id, options.o_value from result, options where result.n_id = {$n_id} and options.o_id = result.o_id) as t1, (select result.user_id, result.q_id, result.o_id, options.o_value from result, options where result.n_id = {$n_id} and options.o_id = result.o_id) as t2 where t1.user_id = t2.user_id and t1.q_id = {$x_id} and t2.q_id = {$y_id} group by t1.o_id, t2.o_id")->result_array();
+		$cross_result = $this->db->query("select t1.o_value as x_value, t1.o_id as x_id,t2.o_id as y_id, count(*) as count from (select result.user_id, result.q_id, result.o_id, options.o_value from result, options where result.naire_id = {$n_id} and options.o_id = result.o_id) as t1, (select result.user_id, result.q_id, result.o_id, options.o_value from result, options where result.naire_id = {$n_id} and options.o_id = result.o_id) as t2 where t1.user_id = t2.user_id and t1.q_id = {$x_id} and t2.q_id = {$y_id} group by t1.o_id, t2.o_id")->result_array();
 
 
 		if (empty($cross_result)) {
@@ -554,7 +554,7 @@ class Naire_model extends CI_Model {
 		ini_set('max_execution_time', '1000');
 		// 获取参数 naire id
 		// JSON 反序列化
-		$n_id = $this->input->post_get('n_id', TRUE);
+		$n_id = $this->input->post_get('naire_id', TRUE);
 		$current = $this->input->post_get('current', TRUE);
 		$page_size = 10;
 		if (empty($n_id)) {
@@ -562,10 +562,10 @@ class Naire_model extends CI_Model {
 		}
 		$offset = ($current - 1) * $page_size;
 		// 问卷信息
-		$naire = $this->db->query("select * from naire where naire.n_id = {$n_id}")
+		$naire = $this->db->query("select * from naire where naire.naire_id = {$n_id}")
 			->result_array();
 		// 问题结果
-		$questions = $this->db->query("SELECT question.q_id, question.q_content, question.q_type FROM result, question WHERE result.q_id = question.q_id and result.n_id = {$n_id} GROUP BY question.q_id")
+		$questions = $this->db->query("SELECT question.q_id, question.q_content, question.q_type FROM result, question WHERE result.q_id = question.q_id and result.naire_id = {$n_id} GROUP BY question.q_id")
 			->result_array();
 		$allTextQuestion = true;
 		foreach ($questions as $question_key => $question_val) {
@@ -575,19 +575,19 @@ class Naire_model extends CI_Model {
 			}
 		}
 		// 参与问卷的用户
-		$total = $this->db->query("SELECT users.user_id, users.u_name, users.u_class, users.u_number, submit_log.s_creattime FROM users, result, submit_log WHERE users.user_id = result.user_id and result.n_id = {$n_id} and submit_log.n_id = {$n_id} and submit_log.user_id = users.user_id GROUP BY result.user_id")->num_rows();
+		$total = $this->db->query("SELECT users.user_id, users.u_name, users.u_class, users.u_number, submit_log.s_creattime FROM users, result, submit_log WHERE users.user_id = result.user_id and result.naire_id = {$n_id} and submit_log.naire_id = {$n_id} and submit_log.user_id = users.user_id GROUP BY result.user_id")->num_rows();
 
-		$users_id_sql = "SELECT t.user_id FROM (SELECT users.user_id FROM users, result, submit_log WHERE users.user_id = result.user_id and result.n_id = {$n_id} and submit_log.n_id = {$n_id} and submit_log.user_id = users.user_id GROUP BY result.user_id ORDER BY submit_log.s_creattime ASC LIMIT {$offset} , {$page_size}) AS t";
+		$users_id_sql = "SELECT t.user_id FROM (SELECT users.user_id FROM users, result, submit_log WHERE users.user_id = result.user_id and result.naire_id = {$n_id} and submit_log.naire_id = {$n_id} and submit_log.user_id = users.user_id GROUP BY result.user_id ORDER BY submit_log.s_creattime ASC LIMIT {$offset} , {$page_size}) AS t";
 
-		$users = $this->db->query("SELECT users.user_id, users.u_name, users.u_class, users.u_number, submit_log.s_creattime FROM users, result, submit_log WHERE users.user_id = result.user_id and result.n_id = {$n_id} and submit_log.n_id = {$n_id} and submit_log.user_id = users.user_id GROUP BY result.user_id ORDER BY submit_log.s_creattime ASC " . " LIMIT " . $offset . " , " . $page_size . " ")->result_array();
+		$users = $this->db->query("SELECT users.user_id, users.u_name, users.u_class, users.u_number, submit_log.s_creattime FROM users, result, submit_log WHERE users.user_id = result.user_id and result.naire_id = {$n_id} and submit_log.naire_id = {$n_id} and submit_log.user_id = users.user_id GROUP BY result.user_id ORDER BY submit_log.s_creattime ASC " . " LIMIT " . $offset . " , " . $page_size . " ")->result_array();
 
 		$userResultSql = "";
 		// 全部是文本题目
 		if ($allTextQuestion) {
 			// 用户答案结果 result.o_id = options.o_id and
-			$userResultSql = "SELECT users.user_id, question.q_id, question.q_content, question.q_type, options.o_value, result.o_id, result.o_addtion, options.o_isaddtion from result, question, users, options WHERE result.o_id = 0 and question.q_id = result.q_id and users.user_id = result.user_id and result.n_id = {$n_id} AND result.user_id IN ({$users_id_sql})  GROUP BY result.user_id, result.q_id";
+			$userResultSql = "SELECT users.user_id, question.q_id, question.q_content, question.q_type, options.o_value, result.o_id, result.o_addtion, options.o_isaddtion from result, question, users, options WHERE result.o_id = 0 and question.q_id = result.q_id and users.user_id = result.user_id and result.naire_id = {$n_id} AND result.user_id IN ({$users_id_sql})  GROUP BY result.user_id, result.q_id";
 		} else {
-			$userResultSql = "(SELECT users.user_id, question.q_id, question.q_content, question.q_type, options.o_value, result.o_id, result.o_addtion, options.o_isaddtion from result, question, users, options WHERE result.o_id = options.o_id and question.q_id = result.q_id and users.user_id = result.user_id and result.n_id = {$n_id} ) UNION ALL (SELECT users.user_id, question.q_id, question.q_content, question.q_type, options.o_value, result.o_id, result.o_addtion, options.o_isaddtion from result, question, users, options WHERE result.o_id = 0 and question.q_id = result.q_id and users.user_id = result.user_id and result.n_id = {$n_id} AND result.user_id IN ({$users_id_sql})  GROUP BY result.user_id)";
+			$userResultSql = "(SELECT users.user_id, question.q_id, question.q_content, question.q_type, options.o_value, result.o_id, result.o_addtion, options.o_isaddtion from result, question, users, options WHERE result.o_id = options.o_id and question.q_id = result.q_id and users.user_id = result.user_id and result.naire_id = {$n_id} ) UNION ALL (SELECT users.user_id, question.q_id, question.q_content, question.q_type, options.o_value, result.o_id, result.o_addtion, options.o_isaddtion from result, question, users, options WHERE result.o_id = 0 and question.q_id = result.q_id and users.user_id = result.user_id and result.naire_id = {$n_id} AND result.user_id IN ({$users_id_sql})  GROUP BY result.user_id)";
 		}
 		// 用户答案结果 result.o_id = options.o_id and
 		$user_result = $this->db->query($userResultSql)
@@ -606,7 +606,7 @@ class Naire_model extends CI_Model {
 
 		// 问卷信息 先遍历 问卷表，拿到问卷id
 		$result["naire"] = array(
-			"n_id" => $naire[0]["n_id"],
+			"naire_id" => $naire[0]["naire_id"],
 			"title" => $naire[0]["n_title"],
 			"creattime" => $naire[0]["n_creattime"],
 			"deadline" => $naire[0]["n_deadline"],
@@ -674,19 +674,19 @@ class Naire_model extends CI_Model {
 		$offset = ($current - 1) * $page_size;
 		// JSON 反序列化
 		// 问卷信息
-		$naire = $this->db->query("select * from naire where naire.n_id = {$n_id}")
+		$naire = $this->db->query("select * from naire where naire.naire_id = {$n_id}")
 			->result_array();
 		// 问题结果
-		$questions = $this->db->query("SELECT question.q_id, question.q_content, question.q_type FROM result, question WHERE result.q_id = question.q_id and result.n_id = {$n_id} GROUP BY question.q_id")
+		$questions = $this->db->query("SELECT question.q_id, question.q_content, question.q_type FROM result, question WHERE result.q_id = question.q_id and result.naire_id = {$n_id} GROUP BY question.q_id")
 			->result_array();
 		// 参与问卷的用户
-//        $users = $this->db->query("SELECT users.user_id, users.u_name, users.u_class, users.u_number, submit_log.s_creattime FROM users, result, submit_log WHERE users.user_id = result.user_id and result.n_id = {$n_id} and submit_log.n_id = {$n_id} and submit_log.user_id = users.user_id GROUP BY result.user_id")->result_array();
-		$users_sql = "SELECT users.user_id, users.u_name, users.u_class, users.u_number, submit_log.s_creattime FROM users, result, submit_log WHERE users.user_id = result.user_id and result.n_id = {$n_id} and submit_log.n_id = {$n_id} and submit_log.user_id = users.user_id GROUP BY result.user_id ORDER BY submit_log.s_creattime ASC " . " LIMIT " . $offset . " , " . $page_size;
-		$users_id_sql = "SELECT t.user_id FROM (SELECT users.user_id FROM users, result, submit_log WHERE users.user_id = result.user_id and result.n_id = {$n_id} and submit_log.n_id = {$n_id} and submit_log.user_id = users.user_id GROUP BY result.user_id ORDER BY submit_log.s_creattime ASC LIMIT {$offset} , {$page_size}) AS t";
+//        $users = $this->db->query("SELECT users.user_id, users.u_name, users.u_class, users.u_number, submit_log.s_creattime FROM users, result, submit_log WHERE users.user_id = result.user_id and result.naire_id = {$n_id} and submit_log.naire_id = {$n_id} and submit_log.user_id = users.user_id GROUP BY result.user_id")->result_array();
+		$users_sql = "SELECT users.user_id, users.u_name, users.u_class, users.u_number, submit_log.s_creattime FROM users, result, submit_log WHERE users.user_id = result.user_id and result.naire_id = {$n_id} and submit_log.naire_id = {$n_id} and submit_log.user_id = users.user_id GROUP BY result.user_id ORDER BY submit_log.s_creattime ASC " . " LIMIT " . $offset . " , " . $page_size;
+		$users_id_sql = "SELECT t.user_id FROM (SELECT users.user_id FROM users, result, submit_log WHERE users.user_id = result.user_id and result.naire_id = {$n_id} and submit_log.naire_id = {$n_id} and submit_log.user_id = users.user_id GROUP BY result.user_id ORDER BY submit_log.s_creattime ASC LIMIT {$offset} , {$page_size}) AS t";
 		$users = $this->db->query($users_sql)->result_array();
 
 		// 用户答案结果
-		// $user_result = $this->db->query("(SELECT users.user_id, question.q_id, question.q_content, question.q_type, options.o_value, result.o_id, result.o_addtion, options.o_isaddtion from result, question, users, options WHERE result.o_id = options.o_id and question.q_id = result.q_id and users.user_id = result.user_id and result.n_id = {$n_id} ) UNION ALL (SELECT users.user_id, question.q_id, question.q_content, question.q_type, options.o_value, result.o_id, result.o_addtion, options.o_isaddtion from result, question, users, options WHERE result.o_id = 0 and question.q_id = result.q_id and users.user_id = result.user_id and result.n_id = {$n_id} AND result.user_id IN ({$users_id_sql}) GROUP BY result.user_id)")
+		// $user_result = $this->db->query("(SELECT users.user_id, question.q_id, question.q_content, question.q_type, options.o_value, result.o_id, result.o_addtion, options.o_isaddtion from result, question, users, options WHERE result.o_id = options.o_id and question.q_id = result.q_id and users.user_id = result.user_id and result.naire_id = {$n_id} ) UNION ALL (SELECT users.user_id, question.q_id, question.q_content, question.q_type, options.o_value, result.o_id, result.o_addtion, options.o_isaddtion from result, question, users, options WHERE result.o_id = 0 and question.q_id = result.q_id and users.user_id = result.user_id and result.naire_id = {$n_id} AND result.user_id IN ({$users_id_sql}) GROUP BY result.user_id)")
 		//     ->result_array();
 
 //		echo var_dump($naire);
@@ -706,9 +706,9 @@ class Naire_model extends CI_Model {
 		// 全部是文本题目
 		if ($allTextQuestion) {
 			// 用户答案结果 result.o_id = options.o_id and
-			$userResultSql = "SELECT users.user_id, question.q_id, question.q_content, question.q_type, options.o_value, result.o_id, result.o_addtion, options.o_isaddtion from result, question, users, options WHERE result.o_id = 0 and question.q_id = result.q_id and users.user_id = result.user_id and result.n_id = {$n_id} AND result.user_id IN ({$users_id_sql})  GROUP BY result.user_id, result.q_id";
+			$userResultSql = "SELECT users.user_id, question.q_id, question.q_content, question.q_type, options.o_value, result.o_id, result.o_addtion, options.o_isaddtion from result, question, users, options WHERE result.o_id = 0 and question.q_id = result.q_id and users.user_id = result.user_id and result.naire_id = {$n_id} AND result.user_id IN ({$users_id_sql})  GROUP BY result.user_id, result.q_id";
 		} else {
-			$userResultSql = "(SELECT users.user_id, question.q_id, question.q_content, question.q_type, options.o_value, result.o_id, result.o_addtion, options.o_isaddtion from result, question, users, options WHERE result.o_id = options.o_id and question.q_id = result.q_id and users.user_id = result.user_id and result.n_id = {$n_id} ) UNION ALL (SELECT users.user_id, question.q_id, question.q_content, question.q_type, options.o_value, result.o_id, result.o_addtion, options.o_isaddtion from result, question, users, options WHERE result.o_id = 0 and question.q_id = result.q_id and users.user_id = result.user_id and result.n_id = {$n_id} AND result.user_id IN ({$users_id_sql}) GROUP BY result.user_id)";
+			$userResultSql = "(SELECT users.user_id, question.q_id, question.q_content, question.q_type, options.o_value, result.o_id, result.o_addtion, options.o_isaddtion from result, question, users, options WHERE result.o_id = options.o_id and question.q_id = result.q_id and users.user_id = result.user_id and result.naire_id = {$n_id} ) UNION ALL (SELECT users.user_id, question.q_id, question.q_content, question.q_type, options.o_value, result.o_id, result.o_addtion, options.o_isaddtion from result, question, users, options WHERE result.o_id = 0 and question.q_id = result.q_id and users.user_id = result.user_id and result.naire_id = {$n_id} AND result.user_id IN ({$users_id_sql}) GROUP BY result.user_id)";
 		}
 		// 用户答案结果 result.o_id = options.o_id and
 		$user_result = $this->db->query($userResultSql)
@@ -723,7 +723,7 @@ class Naire_model extends CI_Model {
 
 		// 问卷信息 先遍历 问卷表，拿到问卷id
 		$result["naire"] = array(
-			"n_id" => $naire[0]["n_id"],
+			"naire_id" => $naire[0]["naire_id"],
 			"title" => $naire[0]["n_title"],
 			"creattime" => $naire[0]["n_creattime"],
 			"deadline" => $naire[0]["n_deadline"],
@@ -792,14 +792,14 @@ class Naire_model extends CI_Model {
 		if ($currentNaire == '') {
 			return array("err" => 1, "data" => "请传入问卷id");
 		}
-		$naire = $this->db->where('n_id', $currentNaire)
+		$naire = $this->db->where('naire_id', $currentNaire)
 			->get('naire')->result_array();
 
 		if (empty($naire)) {
 			return array("err" => 1, "data" => "未找到相应问卷");
 		}
 
-		$sql = "SELECT * FROM ( SELECT *, CASE WHEN id > 0 THEN 1 ELSE 0 END is_finished FROM (SELECT users.user_id, users.u_number, users.u_identity, users.u_name, users.u_nation,users.u_birthday, users.u_sex,users.u_class, users.u_email, users.u_tel, users.u_status, result.user_id as id FROM result RIGHT JOIN users ON users.user_id = result.user_id AND result.n_id = {$currentNaire} GROUP BY users.user_id) as A ) as B WHERE 0=0 ";
+		$sql = "SELECT * FROM ( SELECT *, CASE WHEN id > 0 THEN 1 ELSE 0 END is_finished FROM (SELECT users.user_id, users.u_number, users.u_identity, users.u_name, users.u_nation,users.u_birthday, users.u_sex,users.u_class, users.u_email, users.u_tel, users.u_status, result.user_id as id FROM result RIGHT JOIN users ON users.user_id = result.user_id AND result.naire_id = {$currentNaire} GROUP BY users.user_id) as A ) as B WHERE 0=0 ";
 		if ($only_not_finish) {
 			$sql = $sql . " AND is_finished = 0 ";
 		}
@@ -824,13 +824,13 @@ class Naire_model extends CI_Model {
 		$this->config->load('settings', TRUE);
 		$not_active_days = $this->config->item('not_active_time', 'settings'); // 未活跃时间
 		// 如果传入用户ID,返回当前用户的信息
-		$currentNaire = $this->input->post_get('n_id', TRUE);
+		$currentNaire = $this->input->post_get('naire_id', TRUE);
 		if ($currentNaire == '') {
 			return array("err" => 1, "data" => "请传入问卷id");
 		}
 		$status = $this->input->post_get('status', TRUE);
 		$u_class = $this->input->post_get('u_class', TRUE);
-		$sql = "SELECT * FROM ( SELECT *, CASE WHEN id > 0 THEN 1 ELSE 0 END is_finished FROM (SELECT users.user_id, users.u_number, users.u_identity, users.u_name, users.u_nation,users.u_birthday, users.u_sex, users.u_class, users.u_email, users.u_tel, users.u_status, result.user_id as id FROM result RIGHT JOIN users ON users.user_id = result.user_id AND result.n_id = {$currentNaire} GROUP BY users.user_id) as A ) as B WHERE 0=0 ";
+		$sql = "SELECT * FROM ( SELECT *, CASE WHEN id > 0 THEN 1 ELSE 0 END is_finished FROM (SELECT users.user_id, users.u_number, users.u_identity, users.u_name, users.u_nation,users.u_birthday, users.u_sex, users.u_class, users.u_email, users.u_tel, users.u_status, result.user_id as id FROM result RIGHT JOIN users ON users.user_id = result.user_id AND result.naire_id = {$currentNaire} GROUP BY users.user_id) as A ) as B WHERE 0=0 ";
 		if ($status != '' && $status >= 0) {
 			$sql = $sql . " AND is_finished = '{$status}' ";
 		}
@@ -843,7 +843,7 @@ class Naire_model extends CI_Model {
 		}
 		/*
 		 * 统计是否已完成
-		 * SELECT *, CASE WHEN result > 0 THEN 1 ELSE 0 END is_finished FROM (SELECT users.user_id,users.u_name,users.u_sex,users.u_class,users.u_number,COUNT(*) as result FROM users LEFT JOIN result ON users.user_id = result.user_id AND result.n_id = 23 GROUP BY result.user_id) as A
+		 * SELECT *, CASE WHEN result > 0 THEN 1 ELSE 0 END is_finished FROM (SELECT users.user_id,users.u_name,users.u_sex,users.u_class,users.u_number,COUNT(*) as result FROM users LEFT JOIN result ON users.user_id = result.user_id AND result.naire_id = 23 GROUP BY result.user_id) as A
 		 *
 		 * */
 		// 参数1: $currentPage 当前页码, 参数2: $pageSize 每页显示条数
@@ -882,19 +882,19 @@ class Naire_model extends CI_Model {
 
 	// 修改状态
 	public function change_status() {
-		$n_id = $this->input->post_get('n_id', TRUE);
+		$n_id = $this->input->post_get('naire_id', TRUE);
 		// 修改发布状态
-		$this->db->query("UPDATE naire SET n_status = (1-n_status) WHERE n_id='{$n_id}'");
+		$this->db->query("UPDATE naire SET n_status = (1-n_status) WHERE naire_id='{$n_id}'");
 		$result = $this->db->affected_rows();
 		return array('err' => 0, "data" => $result);
 	}
 
 	// 修改问卷时间
 	public function change_time() {
-		$n_id = json_decode($this->input->raw_input_stream, true)['n_id'];
+		$n_id = json_decode($this->input->raw_input_stream, true)['naire_id'];
 		$n_deadline = json_decode($this->input->raw_input_stream, true)['n_deadline'];
 		// 修改发布状态
-		$this->db->query("UPDATE naire SET n_deadline = {$n_deadline} WHERE n_id='{$n_id}'");
+		$this->db->query("UPDATE naire SET n_deadline = {$n_deadline} WHERE naire_id='{$n_id}'");
 		$result = $this->db->affected_rows();
 		return array('err' => 0, "data" => $result);
 	}

@@ -181,13 +181,13 @@ class User_model extends CI_Model {
         $this->config->load('settings', TRUE);
         $name = json_decode($this->input->raw_input_stream, true)['name'];
         $identity = json_decode($this->input->raw_input_stream, true)['identity'];
-        $nId = json_decode($this->input->raw_input_stream, true)['n_id'];
+        $nId = json_decode($this->input->raw_input_stream, true)['naire_id'];
 
         $query = $this->db->get_where('users', array('u_name' => $name, 'u_identity' => strtoupper($identity)));
         $row = $query->row_array();
         if (count($row) > 0) {
             // 数据库查找该用户
-            $query_naire = $this->db->get_where('result', array('n_id' => $nId, 'user_id' => $row["user_id"]));
+            $query_naire = $this->db->get_where('result', array('naire_id' => $nId, 'user_id' => $row["user_id"]));
             $row_naire = $query_naire->num_rows();
 
             $not_active_days = $this->config->item('not_active_time', 'settings'); // 未活跃时间

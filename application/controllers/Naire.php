@@ -40,7 +40,7 @@ class Naire extends CI_Controller {
         $header = $this->input->get_request_header('Authorization', TRUE);
         list($token) = sscanf($header, 'token %s');
         if ($header != '' && jwt_helper::validate($token)) {
-            $n_id = json_decode($this->input->raw_input_stream, true)['n_id'];
+            $n_id = json_decode($this->input->raw_input_stream, true)['naire_id'];
             $options = json_decode($this->input->raw_input_stream, true)['options'];
             if (empty($n_id) || empty($options)) {
                 echo json_encode(array(
@@ -49,7 +49,7 @@ class Naire extends CI_Controller {
                 ));
                 return;
             }
-            $result = $this->db->where('n_id', $n_id)->update('naire', array(
+            $result = $this->db->where('naire_id', $n_id)->update('naire', array(
                 'n_options' => $options
             ));
             if ($result > 0) {
@@ -211,7 +211,7 @@ class Naire extends CI_Controller {
     public function sourcedataExport() {
         $this->load->model('naire_model');
         $token = $this->input->post_get('token'); // 这里的 token 通过 get 参数的方式获取
-        $n_id = $this->input->post_get('n_id', TRUE);
+        $n_id = $this->input->post_get('naire_id', TRUE);
         $current = $this->input->post_get('current', TRUE);
         $page_size = $this->input->post_get('page_size', TRUE);
         if (empty($n_id) || empty($current) || empty($page_size)) {
@@ -304,7 +304,7 @@ class Naire extends CI_Controller {
     public function exportStatis() {
         $this->load->model('naire_model');
         $token = $this->input->post_get('token'); // 这里的 token 通过 get 参数的方式获取
-        $result = $this->naire_model->get_finish_statis($this->input->post_get('n_id')); // is_finished  已完成 1 未完成 0
+        $result = $this->naire_model->get_finish_statis($this->input->post_get('naire_id')); // is_finished  已完成 1 未完成 0
         if ($token != '' && jwt_helper::validate($token)) {
             // 加载 PHPExcel 库
             $this->load->library('PHPExcel.php');

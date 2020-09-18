@@ -43,7 +43,7 @@ COMMIT;
 DROP TABLE IF EXISTS `ads`;
 CREATE TABLE `ads` (
   `ad_id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `n_id` bigint(20) NOT NULL COMMENT '问卷ID',
+  `naire_id` bigint(20) NOT NULL COMMENT '问卷ID',
   `ad_name` varchar(255) NOT NULL COMMENT '广告名称',
   `ad_url` varchar(255) NOT NULL COMMENT '广告图片地址',
   `ad_href` varchar(255) NOT NULL COMMENT '广告外链',
@@ -75,7 +75,7 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `naire`;
 CREATE TABLE `naire` (
-  `n_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '问卷id',
+  `naire_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '问卷id',
   `a_id` bigint(20) NOT NULL COMMENT '管理员id',
   `n_creattime` varchar(14) NOT NULL COMMENT '创建时间',
   `n_deadline` varchar(14) NOT NULL COMMENT '截止时间',
@@ -83,8 +83,8 @@ CREATE TABLE `naire` (
   `n_status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '发布状态',
   `n_intro` text COMMENT '问卷介绍',
   `n_options` text NOT NULL COMMENT '问卷相关配置(JSON)',
-  PRIMARY KEY (`n_id`),
-  KEY `n_id` (`n_id`)
+  PRIMARY KEY (`naire_id`),
+  KEY `naire_id` (`naire_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8 COMMENT='问卷表';
 
 -- ----------------------------
@@ -96,7 +96,7 @@ CREATE TABLE `options` (
   `o_value` text NOT NULL COMMENT '选项内容',
   `o_desc` varchar(500) NOT NULL COMMENT '选项描述',
   `o_image` varchar(255) NOT NULL COMMENT '选项图片',
-  `n_id` bigint(20) NOT NULL COMMENT '问卷ID',
+  `naire_id` bigint(20) NOT NULL COMMENT '问卷ID',
   `q_id` bigint(20) NOT NULL COMMENT '题目ID',
   `o_isaddtion` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否有附加内容',
   PRIMARY KEY (`o_id`),
@@ -111,7 +111,7 @@ CREATE TABLE `question` (
   `q_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '题目ID',
   `q_content` text NOT NULL COMMENT '题目内容',
   `q_type` varchar(10) NOT NULL COMMENT '题目类型（单选、多选、填空）',
-  `n_id` bigint(20) NOT NULL COMMENT '问卷ID',
+  `naire_id` bigint(20) NOT NULL COMMENT '问卷ID',
   `q_isrequire` tinyint(1) NOT NULL COMMENT '是否为必填项',
   `q_setting` varchar(500) NOT NULL COMMENT '题目配置，如至少选几项等',
   `q_description` text COMMENT '问题描述',
@@ -126,12 +126,12 @@ DROP TABLE IF EXISTS `result`;
 CREATE TABLE `result` (
   `result_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'result_id',
   `user_id` bigint(20) NOT NULL COMMENT '用户ID',
-  `n_id` bigint(20) NOT NULL COMMENT '问卷ID',
+  `naire_id` bigint(20) NOT NULL COMMENT '问卷ID',
   `q_id` bigint(20) NOT NULL COMMENT '题目ID',
   `o_id` bigint(20) NOT NULL COMMENT '选项ID',
   `o_addtion` text COMMENT '附加文字',
   PRIMARY KEY (`result_id`),
-  UNIQUE KEY `user_id` (`user_id`,`n_id`,`q_id`,`o_id`)
+  UNIQUE KEY `user_id` (`user_id`,`naire_id`,`q_id`,`o_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -141,11 +141,11 @@ DROP TABLE IF EXISTS `submit_log`;
 -- truncate table submit_log;
 CREATE TABLE `submit_log` (
   `s_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '填写时间表',
-  `n_id` bigint(20) NOT NULL COMMENT '问卷ID',
+  `naire_id` bigint(20) NOT NULL COMMENT '问卷ID',
   `user_id` bigint(20) NOT NULL COMMENT '用户ID',
   `s_creattime` varchar(14) NOT NULL COMMENT '完成时间',
   PRIMARY KEY (`s_id`),
-  UNIQUE KEY `n_id` (`n_id`,`user_id`) USING BTREE
+  UNIQUE KEY `naire_id` (`naire_id`,`user_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
