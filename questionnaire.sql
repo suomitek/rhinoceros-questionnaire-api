@@ -140,11 +140,11 @@ CREATE TABLE `result` (
 DROP TABLE IF EXISTS `submit_log`;
 -- truncate table submit_log;
 CREATE TABLE `submit_log` (
-  `s_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '填写时间表',
+  `submit_log_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '填写时间表',
   `naire_id` bigint(20) NOT NULL COMMENT '问卷ID',
   `user_id` bigint(20) NOT NULL COMMENT '用户ID',
   `s_creattime` varchar(14) NOT NULL COMMENT '完成时间',
-  PRIMARY KEY (`s_id`),
+  PRIMARY KEY (`submit_log_id`),
   UNIQUE KEY `naire_id` (`naire_id`,`user_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
