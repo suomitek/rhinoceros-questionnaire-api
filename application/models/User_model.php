@@ -119,7 +119,8 @@ class User_model extends CI_Model {
             'u_identity' => strtoupper($data[6]),
             'u_password' => sha1(strtoupper($data[6])), // 密码与身份证相同
             'u_email' => $data[7],
-            'u_tel' => $data[8]
+            'u_tel' => $data[8],
+			'create_time' => time(),
         );
 
         $this->db->insert('users', $insert_data);
