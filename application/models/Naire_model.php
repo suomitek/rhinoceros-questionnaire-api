@@ -33,7 +33,7 @@ class Naire_model extends CI_Model {
 		$result = array(
 			"naire_id" => $naire[0]["naire_id"],
 			"title" => $naire[0]["n_title"],
-			"creattime" => $naire[0]["n_creattime"],
+			"creattime" => $naire[0]["n_createtime"],
 			"deadline" => $naire[0]["n_deadline"],
 			"status" => $naire[0]["n_status"],
 			"options" => $naire[0]["n_options"],
@@ -120,7 +120,7 @@ class Naire_model extends CI_Model {
 				'n_status' => $naire['status'],
 				'n_intro' => trim($naire['intro']),
 				'n_options' => array_key_exists('options', $naire) ? trim($naire['options']) : '',
-				'n_creattime' => utils_helper::getMillisecond()
+				'n_createtime' => utils_helper::getMillisecond()
 			);
 			$this->db->insert('naire', $insert_naire_data);
 			$naire_id = $this->db->insert_id();
@@ -180,7 +180,7 @@ class Naire_model extends CI_Model {
 				'n_status' => $naire['status'],
 				'n_intro' => trim($naire['intro']),
 				'n_options' => array_key_exists('options', $naire) ? trim($naire['options']) : '',
-				'n_creattime' => utils_helper::getMillisecond()
+				'n_createtime' => utils_helper::getMillisecond()
 			);
 
 			$naire_id = $naire['naire_id'];
@@ -350,7 +350,7 @@ class Naire_model extends CI_Model {
 		$result["naire"] = array(
 			"naire_id" => $naire[0]["naire_id"],
 			"title" => $naire[0]["n_title"],
-			"creattime" => $naire[0]["n_creattime"],
+			"creattime" => $naire[0]["n_createtime"],
 			"deadline" => $naire[0]["n_deadline"],
 			"status" => $naire[0]["n_status"],
 			"intro" => $naire[0]["n_intro"]
@@ -488,7 +488,7 @@ class Naire_model extends CI_Model {
 		$result["naire"] = array(
 			"naire_id" => $naire[0]["naire_id"],
 			"title" => $naire[0]["n_title"],
-			"creattime" => $naire[0]["n_creattime"],
+			"creattime" => $naire[0]["n_createtime"],
 			"deadline" => $naire[0]["n_deadline"],
 			"status" => $naire[0]["n_status"],
 			"intro" => $naire[0]["n_intro"]
@@ -608,7 +608,7 @@ class Naire_model extends CI_Model {
 		$result["naire"] = array(
 			"naire_id" => $naire[0]["naire_id"],
 			"title" => $naire[0]["n_title"],
-			"creattime" => $naire[0]["n_creattime"],
+			"creattime" => $naire[0]["n_createtime"],
 			"deadline" => $naire[0]["n_deadline"],
 			"status" => $naire[0]["n_status"],
 			"intro" => $naire[0]["n_intro"]
@@ -725,7 +725,7 @@ class Naire_model extends CI_Model {
 		$result["naire"] = array(
 			"naire_id" => $naire[0]["naire_id"],
 			"title" => $naire[0]["n_title"],
-			"creattime" => $naire[0]["n_creattime"],
+			"creattime" => $naire[0]["n_createtime"],
 			"deadline" => $naire[0]["n_deadline"],
 			"status" => $naire[0]["n_status"],
 			"intro" => $naire[0]["n_intro"]
