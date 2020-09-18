@@ -122,11 +122,13 @@ CREATE TABLE `question` (
 -- ----------------------------
 DROP TABLE IF EXISTS `result`;
 CREATE TABLE `result` (
+  `result_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'result_id',
   `u_id` bigint(20) NOT NULL COMMENT '用户ID',
   `n_id` bigint(20) NOT NULL COMMENT '问卷ID',
   `q_id` bigint(20) NOT NULL COMMENT '题目ID',
   `o_id` bigint(20) NOT NULL COMMENT '选项ID',
   `o_addtion` text COMMENT '附加文字',
+  PRIMARY KEY (`result_id`),
   UNIQUE KEY `u_id` (`u_id`,`n_id`,`q_id`,`o_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
