@@ -252,7 +252,9 @@ class Naire_model extends CI_Model {
 
 		$naire_detail = $this->db->where('n_id', $n_id)->get('naire')->row();
 		$cur_time = (int)(microtime(true) * 1000);
-		if ($naire_detail->n_deadline <= $cur_time) return array("err" => 1, "data" => '问卷提交失败，非可提交时间。');
+		if ($naire_detail->n_deadline <= $cur_time) {
+			return array("err" => 1, "message" => '问卷提交失败，非可提交时间。');
+		}
 
 		$values = [];
 
@@ -296,9 +298,9 @@ class Naire_model extends CI_Model {
 		$this->db->trans_complete();
 
 		if ($this->db->trans_status() === FALSE) {
-			return array("err" => 1, "data" => '写入数据发生错误');
+			return array("err" => 1, "message" => '写入数据发生错误');
 		} else {
-			return array("err" => 0, "data" => '问卷提交成功');
+			return array("err" => 0, "message" => '问卷提交成功');
 		}
 	}
 
