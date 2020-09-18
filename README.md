@@ -36,7 +36,7 @@ location / {
 - php Dockerfile：`/app.dockerfile` 
 - docker-compose 配置：`/docker-compose.yml`
 
-一键部署 php 7.1 + mysql 5.6 + nginx 的命令
+一键部署 php 7.4 + mysql 5.6 + nginx 的命令
 
 ```bash
 docker-compose up -d
