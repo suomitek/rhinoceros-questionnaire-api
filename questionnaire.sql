@@ -37,7 +37,7 @@ CREATE TABLE `admin` (
 -- Records of admin
 -- ----------------------------
 BEGIN;
-INSERT INTO `admin` VALUES (1, 'admin', 'd033e22ae348aeb5660fc2140aec35850c4da997');
+INSERT INTO `admin` VALUES (1, 'admin', 'd033e22ae348aeb5660fc2140aec35850c4da997',1,unix_timestamp(now()),unix_timestamp(now()));
 COMMIT;
 
 -- ----------------------------
@@ -76,7 +76,7 @@ CREATE TABLE `configs` (
 -- Records of configs
 -- ----------------------------
 BEGIN;
-INSERT INTO `configs` VALUES (1, 'smtp_sending', '0', '0未在任务中，1在任务中');
+INSERT INTO `configs` VALUES (1, 'smtp_sending', '0', '0未在任务中，1在任务中',1,unix_timestamp(now()),unix_timestamp(now()));
 COMMIT;
 
 -- ----------------------------
