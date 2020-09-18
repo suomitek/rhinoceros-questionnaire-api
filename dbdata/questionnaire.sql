@@ -1,10 +1,10 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : s1.server.52admin.net
+ Source Server         : h1.corp.suomitek.com
  Source Server Type    : MySQL
  Source Server Version : 50647
- Source Host           : s1.server.52admin.net:33061
+ Source Host           : h1.corp.suomitek.com:33061
  Source Schema         : questionnaire
 
  Target Server Type    : MySQL
