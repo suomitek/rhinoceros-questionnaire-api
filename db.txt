@@ -1,0 +1,5 @@
+docker cp questionnaire.sql ca987d416fab:/var/lib/mysql
+docker exec -i -t ca987d416fab bash
+mysql -uhomestead -p homestead < /var/lib/mysql/questionnaire.sql
+tar -czf dbdata.tar.gz /var/lib/mysql
+
