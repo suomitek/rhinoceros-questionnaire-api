@@ -40,8 +40,9 @@ class Naire extends CI_Controller {
         $header = $this->input->get_request_header('Authorization', TRUE);
         list($token) = sscanf($header, 'token %s');
         if ($header != '' && jwt_helper::validate($token)) {
-            $n_id = json_decode($this->input->raw_input_stream, true)['naire_id'];
-            $options = json_decode($this->input->raw_input_stream, true)['options'];
+			$inputData = json_decode($this->input->raw_input_stream, true);
+            $n_id = $inputData['naire_id'];
+            $options = $inputData['options'];
             if (empty($n_id) || empty($options)) {
                 echo json_encode(array(
                     "err" => 1,
@@ -85,9 +86,10 @@ class Naire extends CI_Controller {
     public function submit() {
         $this->load->model('naire_model');
         $this->load->model('user_model');
-        $post_data = json_decode($this->input->raw_input_stream, true)['result'];
-        $user_id = json_decode($this->input->raw_input_stream, true)['userId'];
-        $n_id = json_decode($this->input->raw_input_stream, true)['nId'];
+		$inputData = json_decode($this->input->raw_input_stream, true);
+        $post_data = $inputData['result'];
+        $user_id = $inputData['userId'];
+        $n_id = $inputData['nId'];
         $result = $this->naire_model->submit_naire($post_data, $n_id, $user_id);
 
         // 当用户成功提交后，发送提交成功邮件

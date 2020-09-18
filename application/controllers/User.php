@@ -149,17 +149,18 @@ class User extends CI_Controller {
         list($token) = sscanf($header, 'token %s');
         if ($header != '' && jwt_helper::validate($token)) {
             // 索引必须与导入表格中的一致
+			$inputData = json_decode($this->input->raw_input_stream, true);
             $insert_data = array(
 //                0 => json_decode($this->input->raw_input_stream, true)['u_major'],
-                0 => json_decode($this->input->raw_input_stream, true)['u_name'],
-                1 => json_decode($this->input->raw_input_stream, true)['u_sex'] == 1 ? '女' : '男',
-                2 => json_decode($this->input->raw_input_stream, true)['u_class'],
-                3 => json_decode($this->input->raw_input_stream, true)['u_number'],
-                4 => json_decode($this->input->raw_input_stream, true)['u_birthday'],
-                5 => json_decode($this->input->raw_input_stream, true)['u_nation'],
-                6 => json_decode($this->input->raw_input_stream, true)['u_identity'],
-                7 => json_decode($this->input->raw_input_stream, true)['u_email'],
-                8 => json_decode($this->input->raw_input_stream, true)['u_tel']
+                0 => $inputData['u_name'],
+                1 => $inputData['u_sex'] == 1 ? '女' : '男',
+                2 => $inputData['u_class'],
+                3 => $inputData['u_number'],
+                4 => $inputData['u_birthday'],
+                5 => $inputData['u_nation'],
+                6 => $inputData['u_identity'],
+                7 => $inputData['u_email'],
+                8 => $inputData['u_tel']
             );
             if ($this->user_model->add_user($insert_data) > 0) {
                 $result = array('err' => 0, "data" => '新增 1 个用户成功');
