@@ -292,7 +292,7 @@ class Naire_model extends CI_Model {
 		$option_data = array(
 			'naire_id' => $n_id,
 			'user_id' => $user_id,
-			's_creattime' => $cur_time
+			's_createtime' => $cur_time
 		);
 		$this->db->insert('submit_log', $option_data);
 		$this->db->trans_complete();
@@ -575,11 +575,11 @@ class Naire_model extends CI_Model {
 			}
 		}
 		// 参与问卷的用户
-		$total = $this->db->query("SELECT users.user_id, users.u_name, users.u_class, users.u_number, submit_log.s_creattime FROM users, result, submit_log WHERE users.user_id = result.user_id and result.naire_id = {$n_id} and submit_log.naire_id = {$n_id} and submit_log.user_id = users.user_id GROUP BY result.user_id")->num_rows();
+		$total = $this->db->query("SELECT users.user_id, users.u_name, users.u_class, users.u_number, submit_log.s_createtime FROM users, result, submit_log WHERE users.user_id = result.user_id and result.naire_id = {$n_id} and submit_log.naire_id = {$n_id} and submit_log.user_id = users.user_id GROUP BY result.user_id")->num_rows();
 
-		$users_id_sql = "SELECT t.user_id FROM (SELECT users.user_id FROM users, result, submit_log WHERE users.user_id = result.user_id and result.naire_id = {$n_id} and submit_log.naire_id = {$n_id} and submit_log.user_id = users.user_id GROUP BY result.user_id ORDER BY submit_log.s_creattime ASC LIMIT {$offset} , {$page_size}) AS t";
+		$users_id_sql = "SELECT t.user_id FROM (SELECT users.user_id FROM users, result, submit_log WHERE users.user_id = result.user_id and result.naire_id = {$n_id} and submit_log.naire_id = {$n_id} and submit_log.user_id = users.user_id GROUP BY result.user_id ORDER BY submit_log.s_createtime ASC LIMIT {$offset} , {$page_size}) AS t";
 
-		$users = $this->db->query("SELECT users.user_id, users.u_name, users.u_class, users.u_number, submit_log.s_creattime FROM users, result, submit_log WHERE users.user_id = result.user_id and result.naire_id = {$n_id} and submit_log.naire_id = {$n_id} and submit_log.user_id = users.user_id GROUP BY result.user_id ORDER BY submit_log.s_creattime ASC " . " LIMIT " . $offset . " , " . $page_size . " ")->result_array();
+		$users = $this->db->query("SELECT users.user_id, users.u_name, users.u_class, users.u_number, submit_log.s_createtime FROM users, result, submit_log WHERE users.user_id = result.user_id and result.naire_id = {$n_id} and submit_log.naire_id = {$n_id} and submit_log.user_id = users.user_id GROUP BY result.user_id ORDER BY submit_log.s_createtime ASC " . " LIMIT " . $offset . " , " . $page_size . " ")->result_array();
 
 		$userResultSql = "";
 		// 全部是文本题目
@@ -625,7 +625,7 @@ class Naire_model extends CI_Model {
 				"u_name" => $users_val["u_name"],
 				"u_class" => $users_val["u_class"],
 				"u_number" => $users_val["u_number"],
-				"s_creattime" => $users_val["s_creattime"]
+				"s_createtime" => $users_val["s_createtime"]
 			);
 			$q_id = 0; // 用于多选题的特殊情况
 			$curAnswer = ""; // 用于多选题的特殊情况
@@ -680,9 +680,9 @@ class Naire_model extends CI_Model {
 		$questions = $this->db->query("SELECT question.question_id, question.q_content, question.q_type FROM result, question WHERE result.question_id = question.question_id and result.naire_id = {$n_id} GROUP BY question.question_id")
 			->result_array();
 		// 参与问卷的用户
-//        $users = $this->db->query("SELECT users.user_id, users.u_name, users.u_class, users.u_number, submit_log.s_creattime FROM users, result, submit_log WHERE users.user_id = result.user_id and result.naire_id = {$n_id} and submit_log.naire_id = {$n_id} and submit_log.user_id = users.user_id GROUP BY result.user_id")->result_array();
-		$users_sql = "SELECT users.user_id, users.u_name, users.u_class, users.u_number, submit_log.s_creattime FROM users, result, submit_log WHERE users.user_id = result.user_id and result.naire_id = {$n_id} and submit_log.naire_id = {$n_id} and submit_log.user_id = users.user_id GROUP BY result.user_id ORDER BY submit_log.s_creattime ASC " . " LIMIT " . $offset . " , " . $page_size;
-		$users_id_sql = "SELECT t.user_id FROM (SELECT users.user_id FROM users, result, submit_log WHERE users.user_id = result.user_id and result.naire_id = {$n_id} and submit_log.naire_id = {$n_id} and submit_log.user_id = users.user_id GROUP BY result.user_id ORDER BY submit_log.s_creattime ASC LIMIT {$offset} , {$page_size}) AS t";
+//        $users = $this->db->query("SELECT users.user_id, users.u_name, users.u_class, users.u_number, submit_log.s_createtime FROM users, result, submit_log WHERE users.user_id = result.user_id and result.naire_id = {$n_id} and submit_log.naire_id = {$n_id} and submit_log.user_id = users.user_id GROUP BY result.user_id")->result_array();
+		$users_sql = "SELECT users.user_id, users.u_name, users.u_class, users.u_number, submit_log.s_createtime FROM users, result, submit_log WHERE users.user_id = result.user_id and result.naire_id = {$n_id} and submit_log.naire_id = {$n_id} and submit_log.user_id = users.user_id GROUP BY result.user_id ORDER BY submit_log.s_createtime ASC " . " LIMIT " . $offset . " , " . $page_size;
+		$users_id_sql = "SELECT t.user_id FROM (SELECT users.user_id FROM users, result, submit_log WHERE users.user_id = result.user_id and result.naire_id = {$n_id} and submit_log.naire_id = {$n_id} and submit_log.user_id = users.user_id GROUP BY result.user_id ORDER BY submit_log.s_createtime ASC LIMIT {$offset} , {$page_size}) AS t";
 		$users = $this->db->query($users_sql)->result_array();
 
 		// 用户答案结果
@@ -743,7 +743,7 @@ class Naire_model extends CI_Model {
 				"u_name" => $users_val["u_name"],
 				"u_class" => $users_val["u_class"],
 				"u_number" => $users_val["u_number"],
-				"s_creattime" => $users_val["s_creattime"]
+				"s_createtime" => $users_val["s_createtime"]
 			);
 			$q_id = 0; // 用于多选题的特殊情况
 			$curAnswer = ""; // 用于多选题的特殊情况

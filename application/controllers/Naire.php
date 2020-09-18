@@ -245,7 +245,7 @@ class Naire extends CI_Controller {
                     ->setCellValue(PHPExcel_Cell::stringFromColumnIndex($i) . '2', $preHeader[$i]);
             }
             // 每行渲染的key
-            $columns = array('u_name', 's_creattime', 'u_class', 'u_number');
+            $columns = array('u_name', 's_createtime', 'u_class', 'u_number');
             // 预设表头后的题目名称
             $key = 4;
             foreach ($result["question"] as $v) {
@@ -263,7 +263,7 @@ class Naire extends CI_Controller {
                     //设置循环从第二行开始
                     $key++;
                     $pCoordinate = PHPExcel_Cell::stringFromColumnIndex($i) . '' . $key;
-                    if ($columns[$i] == 's_creattime') {
+                    if ($columns[$i] == 's_createtime') {
                         $pValue = date('Y-m-d H:i:s', intval($v[$columns[$i]] / 1000));
                     } else {
                         $pValue = $v[$columns[$i]];
