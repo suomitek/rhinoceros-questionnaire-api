@@ -97,7 +97,7 @@ CREATE TABLE `options` (
   `o_desc` varchar(500) NOT NULL COMMENT '选项描述',
   `o_image` varchar(255) NOT NULL COMMENT '选项图片',
   `naire_id` bigint(20) NOT NULL COMMENT '问卷ID',
-  `q_id` bigint(20) NOT NULL COMMENT '题目ID',
+  `question_id` bigint(20) NOT NULL COMMENT '题目ID',
   `o_isaddtion` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否有附加内容',
   PRIMARY KEY (`options_id`),
   KEY `options_id` (`options_id`)
@@ -108,15 +108,15 @@ CREATE TABLE `options` (
 -- ----------------------------
 DROP TABLE IF EXISTS `question`;
 CREATE TABLE `question` (
-  `q_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '题目ID',
+  `question_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '题目ID',
   `q_content` text NOT NULL COMMENT '题目内容',
   `q_type` varchar(10) NOT NULL COMMENT '题目类型（单选、多选、填空）',
   `naire_id` bigint(20) NOT NULL COMMENT '问卷ID',
   `q_isrequire` tinyint(1) NOT NULL COMMENT '是否为必填项',
   `q_setting` varchar(500) NOT NULL COMMENT '题目配置，如至少选几项等',
   `q_description` text COMMENT '问题描述',
-  PRIMARY KEY (`q_id`),
-  KEY `q_id` (`q_id`)
+  PRIMARY KEY (`question_id`),
+  KEY `question_id` (`question_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='题目表';
 
 -- ----------------------------
@@ -127,11 +127,11 @@ CREATE TABLE `result` (
   `result_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'result_id',
   `user_id` bigint(20) NOT NULL COMMENT '用户ID',
   `naire_id` bigint(20) NOT NULL COMMENT '问卷ID',
-  `q_id` bigint(20) NOT NULL COMMENT '题目ID',
+  `question_id` bigint(20) NOT NULL COMMENT '题目ID',
   `options_id` bigint(20) NOT NULL COMMENT '选项ID',
   `o_addtion` text COMMENT '附加文字',
   PRIMARY KEY (`result_id`),
-  UNIQUE KEY `user_id` (`user_id`,`naire_id`,`q_id`,`options_id`)
+  UNIQUE KEY `user_id` (`user_id`,`naire_id`,`question_id`,`options_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------

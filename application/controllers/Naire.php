@@ -251,7 +251,7 @@ class Naire extends CI_Controller {
             foreach ($result["question"] as $v) {
                 $objPHPExcel->getActiveSheet()
                     ->setCellValue(PHPExcel_Cell::stringFromColumnIndex($key) . '2', $v["q_content"]);
-                array_push($columns, "q_" . $v["q_id"]);
+                array_push($columns, "q_" . $v["question_id"]);
                 $key++;
             }
 

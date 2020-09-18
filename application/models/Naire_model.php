@@ -43,7 +43,7 @@ class Naire_model extends CI_Model {
 //		  echo var_dump($val);
 			$temp = [];
 			foreach ($options as $optionitem => $optionval) {
-				if ($questionval['q_id'] == $optionval['q_id']) {
+				if ($questionval['question_id'] == $optionval['question_id']) {
 					$temp[] = array(
 						"options_id" => $optionval['options_id'],
 						"content" => $optionval['o_value'],
@@ -55,7 +55,7 @@ class Naire_model extends CI_Model {
 			}
 			if ($questionval["q_type"] == '单选') {
 				$result['topic'][] = array(
-					"q_id" => $questionval["q_id"],
+					"question_id" => $questionval["question_id"],
 					"question" => $questionval["q_content"],
 					"isRequired" => $questionval["q_isrequire"] == "1" ? true : false,
 					"type" => $questionval["q_type"],
@@ -66,7 +66,7 @@ class Naire_model extends CI_Model {
 				);
 			} else if ($questionval["q_type"] == '多选') {
 				$result['topic'][] = array(
-					"q_id" => $questionval["q_id"],
+					"question_id" => $questionval["question_id"],
 					"question" => $questionval["q_content"],
 					"isRequired" => $questionval["q_isrequire"] == "1" ? true : false,
 					"type" => $questionval["q_type"],
@@ -78,7 +78,7 @@ class Naire_model extends CI_Model {
 				);
 			} else if ($questionval["q_type"] == '文本') {
 				$result['topic'][] = array(
-					"q_id" => $questionval["q_id"],
+					"question_id" => $questionval["question_id"],
 					"question" => $questionval["q_content"],
 					"isRequired" => $questionval["q_isrequire"] == "1" ? true : false,
 					"type" => $questionval["q_type"],
@@ -154,7 +154,7 @@ class Naire_model extends CI_Model {
 						$insert_option_data = array(
 							'o_value' => trim($optionval['content']),
 							'naire_id' => $naire_id,
-							'q_id' => $question_id,
+							'question_id' => $question_id,
 							'o_image' => trim($optionval['image']),
 							'o_desc' => trim($optionval['desc']),
 							'o_isaddtion' => $optionval['isAddition'] == "true" ? 1 : 0
@@ -222,7 +222,7 @@ class Naire_model extends CI_Model {
 						$insert_option_data = array(
 							'o_value' => trim($optionval['content']),
 							'naire_id' => $naire_id,
-							'q_id' => $question_id,
+							'question_id' => $question_id,
 							'o_image' => trim($optionval['image']),
 							'o_desc' => trim($optionval['desc']),
 							'o_isaddtion' => $optionval['isAddition'] == "true" ? 1 : 0
@@ -260,7 +260,7 @@ class Naire_model extends CI_Model {
 
 		foreach ($result as $key => $val) {
 			//	[naire_id] => 12
-			//  [q_id] => 41
+			//  [question_id] => 41
 			//  [options_id] => 52
 			//  [o_addition] =>
 			// 用户 user_id 获取
@@ -270,7 +270,7 @@ class Naire_model extends CI_Model {
 					$values[] = array(
 						'naire_id' => $val['naire_id'],
 						'user_id' => $val['user_id'],
-						'q_id' => $val['q_id'],
+						'question_id' => $val['question_id'],
 						'options_id' => $o_val,
 						'o_addtion' => trim($val['o_addition']),
 					);
@@ -279,7 +279,7 @@ class Naire_model extends CI_Model {
 				$values[] = array(
 					'naire_id' => $val['naire_id'],
 					'user_id' => $val['user_id'],
-					'q_id' => $val['q_id'],
+					'question_id' => $val['question_id'],
 					'options_id' => is_null($val['options_id']) ? '' : $val['options_id'],
 					'o_addtion' => $val['o_addition'],
 				);
@@ -366,9 +366,9 @@ class Naire_model extends CI_Model {
 			$addtionContent = []; // 附加理由
 			// 用于图表显示
 			// 查询该题目总调查人数
-			// select *,count(*) as total from result where naire_id = {$naire[0]["naire_id"]} and q_id = {$questionval["q_id"]} group by q_id
+			// select *,count(*) as total from result where naire_id = {$naire[0]["naire_id"]} and question_id = {$questionval["question_id"]} group by question_id
 			$total = 0;
-			$totalResult = $this->db->query("select *,count(*) as total from result where naire_id = {$naire[0]['naire_id']} and q_id = {$questionval['q_id']} group by q_id");
+			$totalResult = $this->db->query("select *,count(*) as total from result where naire_id = {$naire[0]['naire_id']} and question_id = {$questionval['question_id']} group by question_id");
 
 			if ($totalResult->num_rows() > 0) {
 				$total = $totalResult->result_array()[0]["total"];
@@ -378,17 +378,17 @@ class Naire_model extends CI_Model {
 
 			foreach ($options as $optionitem => $optionval) {
 				// 如果题目id 等于 选项表当中的题目id，则将该选项添加到临时数组中
-				if ($questionval['q_id'] == $optionval['q_id']) {
+				if ($questionval['question_id'] == $optionval['question_id']) {
 
 					// 查询每个选项在数据库中的个数
-					// select *,count(*) as total from result where naire_id = {$naire[0]['naire_id']} and q_id = {$questionval['q_id']} and options_id = {$optionval['options_id']}
-					$count = $this->db->query("select *,count(*) as total from result where naire_id = {$naire[0]['naire_id']} and q_id = {$questionval['q_id']} and options_id = {$optionval['options_id']}")->result_array()[0]["total"];
+					// select *,count(*) as total from result where naire_id = {$naire[0]['naire_id']} and question_id = {$questionval['question_id']} and options_id = {$optionval['options_id']}
+					$count = $this->db->query("select *,count(*) as total from result where naire_id = {$naire[0]['naire_id']} and question_id = {$questionval['question_id']} and options_id = {$optionval['options_id']}")->result_array()[0]["total"];
 					$charts[] = $count;
 					$percent = $count > 0 ? round(($count / $joinCount * 100), 2) : 0;
 					// 查询附加理由的内容
-					// select * from result, options where result.naire_id = {$naire[0]['naire_id']} and result.options_id and options.options_id and result.q_id = {$questionval['q_id']}  and options.o_isaddtion = {$optionval['options_id']}
+					// select * from result, options where result.naire_id = {$naire[0]['naire_id']} and result.options_id and options.options_id and result.question_id = {$questionval['question_id']}  and options.o_isaddtion = {$optionval['options_id']}
 
-					$addtionData = $this->db->query("select * from result, options where result.naire_id = {$naire[0]['naire_id']} and result.options_id = options.options_id and result.q_id = {$questionval['q_id']}  and options.o_isaddtion = 1 and result.options_id = {$optionval['options_id']}")->result_array();
+					$addtionData = $this->db->query("select * from result, options where result.naire_id = {$naire[0]['naire_id']} and result.options_id = options.options_id and result.question_id = {$questionval['question_id']}  and options.o_isaddtion = 1 and result.options_id = {$optionval['options_id']}")->result_array();
 					foreach ($addtionData as $addtionitem => $addtionval) {
 						if ($addtionval["o_addtion"] != "") {
 //							print_r($addtionval["o_addtion"]);
@@ -411,7 +411,7 @@ class Naire_model extends CI_Model {
 			// 单选题
 			if ($questionval["q_type"] == '单选') {
 				$result['questions'][] = array(
-					"q_id" => $questionval["q_id"],
+					"question_id" => $questionval["question_id"],
 					"question" => $questionval["q_content"],
 					"isRequired" => $questionval["q_isrequire"] == "1" ? true : false,
 					"type" => $questionval["q_type"],
@@ -425,7 +425,7 @@ class Naire_model extends CI_Model {
 				// 多选题
 			} else if ($questionval["q_type"] == '多选') {
 				$result['questions'][] = array(
-					"q_id" => $questionval["q_id"],
+					"question_id" => $questionval["question_id"],
 					"question" => $questionval["q_content"],
 					"isRequired" => $questionval["q_isrequire"] == "1" ? true : false,
 					"type" => $questionval["q_type"],
@@ -439,7 +439,7 @@ class Naire_model extends CI_Model {
 			} else if ($questionval["q_type"] == '文本') {
 				// 拿问答题提交内容
 				$answerList = [];
-				$answerData = $this->db->query("select * from result,users where naire_id = {$naire[0]["naire_id"]} and q_id = {$questionval["q_id"]} and result.user_id = users.user_id")->result_array();
+				$answerData = $this->db->query("select * from result,users where naire_id = {$naire[0]["naire_id"]} and question_id = {$questionval["question_id"]} and result.user_id = users.user_id")->result_array();
 				foreach ($answerData as $item => $val) {
 //					print_r($val["o_addtion"]);
 					$answerList[] = array(
@@ -449,7 +449,7 @@ class Naire_model extends CI_Model {
 					);
 				}
 				$result['questions'][] = array(
-					"q_id" => $questionval["q_id"],
+					"question_id" => $questionval["question_id"],
 					"question" => $questionval["q_content"],
 					"isRequired" => $questionval["q_isrequire"] == "1" ? true : false,
 					"type" => $questionval["q_type"],
@@ -477,7 +477,7 @@ class Naire_model extends CI_Model {
 		// 问卷信息
 		$naire = $this->db->query("select * from naire where naire.naire_id = {$n_id}")
 			->result_array();
-		$questions = $this->db->query("select q_id as value, q_content as label from question where question.naire_id = {$n_id} and (question.q_type = '单选' or question.q_type = '多选')")
+		$questions = $this->db->query("select question_id as value, q_content as label from question where question.naire_id = {$n_id} and (question.q_type = '单选' or question.q_type = '多选')")
 			->result_array();
 
 		if (empty($naire)) {
@@ -526,12 +526,12 @@ class Naire_model extends CI_Model {
 		}
 
 		// 表头
-		$table_column = $this->db->query("select * from options where options.q_id = {$y_id}")
+		$table_column = $this->db->query("select * from options where options.question_id = {$y_id}")
 			->result_array();
-		$table_row = $this->db->query("select * from options where options.q_id = {$x_id}")
+		$table_row = $this->db->query("select * from options where options.question_id = {$x_id}")
 			->result_array();
 
-		$cross_result = $this->db->query("select t1.o_value as x_value, t1.options_id as x_id,t2.options_id as y_id, count(*) as count from (select result.user_id, result.q_id, result.options_id, options.o_value from result, options where result.naire_id = {$n_id} and options.options_id = result.options_id) as t1, (select result.user_id, result.q_id, result.options_id, options.o_value from result, options where result.naire_id = {$n_id} and options.options_id = result.options_id) as t2 where t1.user_id = t2.user_id and t1.q_id = {$x_id} and t2.q_id = {$y_id} group by t1.options_id, t2.options_id")->result_array();
+		$cross_result = $this->db->query("select t1.o_value as x_value, t1.options_id as x_id,t2.options_id as y_id, count(*) as count from (select result.user_id, result.question_id, result.options_id, options.o_value from result, options where result.naire_id = {$n_id} and options.options_id = result.options_id) as t1, (select result.user_id, result.question_id, result.options_id, options.o_value from result, options where result.naire_id = {$n_id} and options.options_id = result.options_id) as t2 where t1.user_id = t2.user_id and t1.question_id = {$x_id} and t2.question_id = {$y_id} group by t1.options_id, t2.options_id")->result_array();
 
 
 		if (empty($cross_result)) {
@@ -565,7 +565,7 @@ class Naire_model extends CI_Model {
 		$naire = $this->db->query("select * from naire where naire.naire_id = {$n_id}")
 			->result_array();
 		// 问题结果
-		$questions = $this->db->query("SELECT question.q_id, question.q_content, question.q_type FROM result, question WHERE result.q_id = question.q_id and result.naire_id = {$n_id} GROUP BY question.q_id")
+		$questions = $this->db->query("SELECT question.question_id, question.q_content, question.q_type FROM result, question WHERE result.question_id = question.question_id and result.naire_id = {$n_id} GROUP BY question.question_id")
 			->result_array();
 		$allTextQuestion = true;
 		foreach ($questions as $question_key => $question_val) {
@@ -585,9 +585,9 @@ class Naire_model extends CI_Model {
 		// 全部是文本题目
 		if ($allTextQuestion) {
 			// 用户答案结果 result.options_id = options.options_id and
-			$userResultSql = "SELECT users.user_id, question.q_id, question.q_content, question.q_type, options.o_value, result.options_id, result.o_addtion, options.o_isaddtion from result, question, users, options WHERE result.options_id = 0 and question.q_id = result.q_id and users.user_id = result.user_id and result.naire_id = {$n_id} AND result.user_id IN ({$users_id_sql})  GROUP BY result.user_id, result.q_id";
+			$userResultSql = "SELECT users.user_id, question.question_id, question.q_content, question.q_type, options.o_value, result.options_id, result.o_addtion, options.o_isaddtion from result, question, users, options WHERE result.options_id = 0 and question.question_id = result.question_id and users.user_id = result.user_id and result.naire_id = {$n_id} AND result.user_id IN ({$users_id_sql})  GROUP BY result.user_id, result.question_id";
 		} else {
-			$userResultSql = "(SELECT users.user_id, question.q_id, question.q_content, question.q_type, options.o_value, result.options_id, result.o_addtion, options.o_isaddtion from result, question, users, options WHERE result.options_id = options.options_id and question.q_id = result.q_id and users.user_id = result.user_id and result.naire_id = {$n_id} ) UNION ALL (SELECT users.user_id, question.q_id, question.q_content, question.q_type, options.o_value, result.options_id, result.o_addtion, options.o_isaddtion from result, question, users, options WHERE result.options_id = 0 and question.q_id = result.q_id and users.user_id = result.user_id and result.naire_id = {$n_id} AND result.user_id IN ({$users_id_sql})  GROUP BY result.user_id)";
+			$userResultSql = "(SELECT users.user_id, question.question_id, question.q_content, question.q_type, options.o_value, result.options_id, result.o_addtion, options.o_isaddtion from result, question, users, options WHERE result.options_id = options.options_id and question.question_id = result.question_id and users.user_id = result.user_id and result.naire_id = {$n_id} ) UNION ALL (SELECT users.user_id, question.question_id, question.q_content, question.q_type, options.o_value, result.options_id, result.o_addtion, options.o_isaddtion from result, question, users, options WHERE result.options_id = 0 and question.question_id = result.question_id and users.user_id = result.user_id and result.naire_id = {$n_id} AND result.user_id IN ({$users_id_sql})  GROUP BY result.user_id)";
 		}
 		// 用户答案结果 result.options_id = options.options_id and
 		$user_result = $this->db->query($userResultSql)
@@ -634,7 +634,7 @@ class Naire_model extends CI_Model {
 				// 同一个用户
 				if ($user_result_val["user_id"] == $users_val["user_id"]) {
 
-					if ($user_result_val["q_id"] == $q_id && $user_result_val["q_type"] == "多选") { // 多选题
+					if ($user_result_val["question_id"] == $q_id && $user_result_val["q_type"] == "多选") { // 多选题
 						$curAnswer .= "、" . $user_result_val["o_value"];
 					} else if ($user_result_val["q_type"] == "文本") { // 文本题目
 						$curAnswer = $user_result_val["o_addtion"];
@@ -648,9 +648,9 @@ class Naire_model extends CI_Model {
 					} else {
 						$curAnswer = $user_result_val["o_value"];
 					}
-					$result_temp["q_" . $user_result_val["q_id"]] = $curAnswer;
+					$result_temp["q_" . $user_result_val["question_id"]] = $curAnswer;
 
-					$q_id = $user_result_val["q_id"];
+					$q_id = $user_result_val["question_id"];
 				}
 			}
 
@@ -677,7 +677,7 @@ class Naire_model extends CI_Model {
 		$naire = $this->db->query("select * from naire where naire.naire_id = {$n_id}")
 			->result_array();
 		// 问题结果
-		$questions = $this->db->query("SELECT question.q_id, question.q_content, question.q_type FROM result, question WHERE result.q_id = question.q_id and result.naire_id = {$n_id} GROUP BY question.q_id")
+		$questions = $this->db->query("SELECT question.question_id, question.q_content, question.q_type FROM result, question WHERE result.question_id = question.question_id and result.naire_id = {$n_id} GROUP BY question.question_id")
 			->result_array();
 		// 参与问卷的用户
 //        $users = $this->db->query("SELECT users.user_id, users.u_name, users.u_class, users.u_number, submit_log.s_creattime FROM users, result, submit_log WHERE users.user_id = result.user_id and result.naire_id = {$n_id} and submit_log.naire_id = {$n_id} and submit_log.user_id = users.user_id GROUP BY result.user_id")->result_array();
@@ -686,7 +686,7 @@ class Naire_model extends CI_Model {
 		$users = $this->db->query($users_sql)->result_array();
 
 		// 用户答案结果
-		// $user_result = $this->db->query("(SELECT users.user_id, question.q_id, question.q_content, question.q_type, options.o_value, result.options_id, result.o_addtion, options.o_isaddtion from result, question, users, options WHERE result.options_id = options.options_id and question.q_id = result.q_id and users.user_id = result.user_id and result.naire_id = {$n_id} ) UNION ALL (SELECT users.user_id, question.q_id, question.q_content, question.q_type, options.o_value, result.options_id, result.o_addtion, options.o_isaddtion from result, question, users, options WHERE result.options_id = 0 and question.q_id = result.q_id and users.user_id = result.user_id and result.naire_id = {$n_id} AND result.user_id IN ({$users_id_sql}) GROUP BY result.user_id)")
+		// $user_result = $this->db->query("(SELECT users.user_id, question.question_id, question.q_content, question.q_type, options.o_value, result.options_id, result.o_addtion, options.o_isaddtion from result, question, users, options WHERE result.options_id = options.options_id and question.question_id = result.question_id and users.user_id = result.user_id and result.naire_id = {$n_id} ) UNION ALL (SELECT users.user_id, question.question_id, question.q_content, question.q_type, options.o_value, result.options_id, result.o_addtion, options.o_isaddtion from result, question, users, options WHERE result.options_id = 0 and question.question_id = result.question_id and users.user_id = result.user_id and result.naire_id = {$n_id} AND result.user_id IN ({$users_id_sql}) GROUP BY result.user_id)")
 		//     ->result_array();
 
 //		echo var_dump($naire);
@@ -706,9 +706,9 @@ class Naire_model extends CI_Model {
 		// 全部是文本题目
 		if ($allTextQuestion) {
 			// 用户答案结果 result.options_id = options.options_id and
-			$userResultSql = "SELECT users.user_id, question.q_id, question.q_content, question.q_type, options.o_value, result.options_id, result.o_addtion, options.o_isaddtion from result, question, users, options WHERE result.options_id = 0 and question.q_id = result.q_id and users.user_id = result.user_id and result.naire_id = {$n_id} AND result.user_id IN ({$users_id_sql})  GROUP BY result.user_id, result.q_id";
+			$userResultSql = "SELECT users.user_id, question.question_id, question.q_content, question.q_type, options.o_value, result.options_id, result.o_addtion, options.o_isaddtion from result, question, users, options WHERE result.options_id = 0 and question.question_id = result.question_id and users.user_id = result.user_id and result.naire_id = {$n_id} AND result.user_id IN ({$users_id_sql})  GROUP BY result.user_id, result.question_id";
 		} else {
-			$userResultSql = "(SELECT users.user_id, question.q_id, question.q_content, question.q_type, options.o_value, result.options_id, result.o_addtion, options.o_isaddtion from result, question, users, options WHERE result.options_id = options.options_id and question.q_id = result.q_id and users.user_id = result.user_id and result.naire_id = {$n_id} ) UNION ALL (SELECT users.user_id, question.q_id, question.q_content, question.q_type, options.o_value, result.options_id, result.o_addtion, options.o_isaddtion from result, question, users, options WHERE result.options_id = 0 and question.q_id = result.q_id and users.user_id = result.user_id and result.naire_id = {$n_id} AND result.user_id IN ({$users_id_sql}) GROUP BY result.user_id)";
+			$userResultSql = "(SELECT users.user_id, question.question_id, question.q_content, question.q_type, options.o_value, result.options_id, result.o_addtion, options.o_isaddtion from result, question, users, options WHERE result.options_id = options.options_id and question.question_id = result.question_id and users.user_id = result.user_id and result.naire_id = {$n_id} ) UNION ALL (SELECT users.user_id, question.question_id, question.q_content, question.q_type, options.o_value, result.options_id, result.o_addtion, options.o_isaddtion from result, question, users, options WHERE result.options_id = 0 and question.question_id = result.question_id and users.user_id = result.user_id and result.naire_id = {$n_id} AND result.user_id IN ({$users_id_sql}) GROUP BY result.user_id)";
 		}
 		// 用户答案结果 result.options_id = options.options_id and
 		$user_result = $this->db->query($userResultSql)
@@ -752,7 +752,7 @@ class Naire_model extends CI_Model {
 				// 同一个用户
 				if ($user_result_val["user_id"] == $users_val["user_id"]) {
 
-					if ($user_result_val["q_id"] == $q_id && $user_result_val["q_type"] == "多选") { // 多选题
+					if ($user_result_val["question_id"] == $q_id && $user_result_val["q_type"] == "多选") { // 多选题
 						$curAnswer .= "、" . $user_result_val["o_value"];
 					} else if ($user_result_val["q_type"] == "文本") { // 文本题目
 						$curAnswer = $user_result_val["o_addtion"];
@@ -766,9 +766,9 @@ class Naire_model extends CI_Model {
 					} else {
 						$curAnswer = $user_result_val["o_value"];
 					}
-					$result_temp["q_" . $user_result_val["q_id"]] = $curAnswer;
+					$result_temp["q_" . $user_result_val["question_id"]] = $curAnswer;
 
-					$q_id = $user_result_val["q_id"];
+					$q_id = $user_result_val["question_id"];
 				}
 			}
 
