@@ -92,7 +92,7 @@ class Naire extends CI_Controller {
 
         // 当用户成功提交后，发送提交成功邮件
         if ($result['err'] == 0) {
-            $this->user_model->update_user_active($user_id);
+            //$this->user_model->update_user_active($user_id);
             self::_sendMail($user_id);
         }
 
