@@ -90,15 +90,15 @@ CREATE TABLE `naire` (
 -- ----------------------------
 DROP TABLE IF EXISTS `options`;
 CREATE TABLE `options` (
-  `o_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '选项ID',
+  `options_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '选项ID',
   `o_value` text NOT NULL COMMENT '选项内容',
   `o_desc` varchar(500) NOT NULL COMMENT '选项描述',
   `o_image` varchar(255) NOT NULL COMMENT '选项图片',
   `naire_id` bigint(20) NOT NULL COMMENT '问卷ID',
   `q_id` bigint(20) NOT NULL COMMENT '题目ID',
   `o_isaddtion` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否有附加内容',
-  PRIMARY KEY (`o_id`),
-  KEY `o_id` (`o_id`)
+  PRIMARY KEY (`options_id`),
+  KEY `options_id` (`options_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=792 DEFAULT CHARSET=utf8 COMMENT='题目选项表';
 
 -- ----------------------------
@@ -125,9 +125,9 @@ CREATE TABLE `result` (
   `user_id` bigint(20) NOT NULL COMMENT '用户ID',
   `naire_id` bigint(20) NOT NULL COMMENT '问卷ID',
   `q_id` bigint(20) NOT NULL COMMENT '题目ID',
-  `o_id` bigint(20) NOT NULL COMMENT '选项ID',
+  `options_id` bigint(20) NOT NULL COMMENT '选项ID',
   `o_addtion` text COMMENT '附加文字',
-  UNIQUE KEY `user_id` (`user_id`,`naire_id`,`q_id`,`o_id`)
+  UNIQUE KEY `user_id` (`user_id`,`naire_id`,`q_id`,`options_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------

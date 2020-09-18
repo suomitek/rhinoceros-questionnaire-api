@@ -2,3 +2,4 @@
 1. add user data
 2. add naire data
 3. add admin data
+4. add options data
