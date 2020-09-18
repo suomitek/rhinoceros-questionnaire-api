@@ -14,7 +14,7 @@ class User_model extends CI_Model {
         $keyword = $this->input->post_get('keyword', TRUE);
         $value = $this->input->post_get('value', TRUE);
         // 如果传入用户ID,返回当前用户的信息
-        $currentUser = $this->input->post_get('u_id', TRUE);
+        $currentUser = $this->input->post_get('user_id', TRUE);
         // 参数1: $currentPage 当前页码, 参数2: $pageSize 每页显示条数
         // 如果有参数,则返回分页的数据,没有返回全部数据
         $currentPage = $this->input->post_get('current', TRUE);
@@ -30,7 +30,7 @@ class User_model extends CI_Model {
         // 如果传入用户ID,返回当前用户的信息
         if ($currentUser != '') {
             // 返回全部数据
-            $query = $this->db->where('u_id', $currentUser)
+            $query = $this->db->where('user_id', $currentUser)
                 ->get('users');
             // todo 搜索条件
             if (!$query) {
@@ -81,7 +81,7 @@ class User_model extends CI_Model {
 
     // 更新用户
     public function update_user() {
-        $u_id = json_decode($this->input->raw_input_stream, true)['u_id'];
+        $u_id = json_decode($this->input->raw_input_stream, true)['user_id'];
         $update_data = array(
 //            'u_major' => json_decode($this->input->raw_input_stream, true)['u_major'],
             'u_name' => json_decode($this->input->raw_input_stream, true)['u_name'],
@@ -95,7 +95,7 @@ class User_model extends CI_Model {
             'u_tel' => json_decode($this->input->raw_input_stream, true)['u_tel'],
             'u_password' => sha1(json_decode($this->input->raw_input_stream, true)['u_number'])
         );
-        $this->db->where('u_id', $u_id);
+        $this->db->where('user_id', $u_id);
         $this->db->update('users', $update_data);
         return $this->db->affected_rows();
     }
@@ -143,7 +143,7 @@ class User_model extends CI_Model {
 
     // 删除用户
     public function del_user() {
-        $user_id = json_decode($this->input->raw_input_stream, true)['u_id'];
+        $user_id = json_decode($this->input->raw_input_stream, true)['user_id'];
 
         // 删除多表中的数据
 //        $del_tables = array('users', 'helper');
@@ -154,14 +154,14 @@ class User_model extends CI_Model {
         if (empty($user_id)) {
             return array('err' => 1, "data" => '请传入参数');
         } else {
-            $this->db->query("DELETE FROM users WHERE users.u_id in ({$user_id})");
+            $this->db->query("DELETE FROM users WHERE users.user_id in ({$user_id})");
             $rows = $this->db->affected_rows();
 
             // 同时清空任务表
             $this->db->query("DELETE FROM task WHERE user_id in({$user_id})");
             // 删除多表中的数据
             $del_tables = array('users', 'result', 'submit_log');
-            $this->db->where_in('u_id', $user_id);
+            $this->db->where_in('user_id', $user_id);
             $this->db->delete($del_tables);
 
         }
@@ -187,7 +187,7 @@ class User_model extends CI_Model {
         $row = $query->row_array();
         if (count($row) > 0) {
             // 数据库查找该用户
-            $query_naire = $this->db->get_where('result', array('n_id' => $nId, 'u_id' => $row["u_id"]));
+            $query_naire = $this->db->get_where('result', array('n_id' => $nId, 'user_id' => $row["user_id"]));
             $row_naire = $query_naire->num_rows();
 
             $not_active_days = $this->config->item('not_active_time', 'settings'); // 未活跃时间
@@ -195,12 +195,12 @@ class User_model extends CI_Model {
 
             // 用户启用了活跃时间，并且用户已经超过了一段时间未登陆
             if ($not_active_days !== 0 && ($row["u_status"] > 0 || $is_not_active)) {
-                $this->change_user_status($row["u_id"], 1);
+                $this->change_user_status($row["user_id"], 1);
                 return array('err' => 1, "data" => "由于一段时间未参与活动，账户已被冻结，请联系管理员进行解冻！");
             }
 
             $data = array(
-                "u_id" => $row["u_id"],
+                "user_id" => $row["user_id"],
                 "name" => $row["u_name"],
                 "isFinished" => $row_naire > 0
             );

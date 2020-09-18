@@ -125,13 +125,13 @@ CREATE TABLE `question` (
 DROP TABLE IF EXISTS `result`;
 CREATE TABLE `result` (
   `result_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'result_id',
-  `u_id` bigint(20) NOT NULL COMMENT '用户ID',
+  `user_id` bigint(20) NOT NULL COMMENT '用户ID',
   `n_id` bigint(20) NOT NULL COMMENT '问卷ID',
   `q_id` bigint(20) NOT NULL COMMENT '题目ID',
   `o_id` bigint(20) NOT NULL COMMENT '选项ID',
   `o_addtion` text COMMENT '附加文字',
   PRIMARY KEY (`result_id`),
-  UNIQUE KEY `u_id` (`u_id`,`n_id`,`q_id`,`o_id`)
+  UNIQUE KEY `user_id` (`user_id`,`n_id`,`q_id`,`o_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -142,10 +142,10 @@ DROP TABLE IF EXISTS `submit_log`;
 CREATE TABLE `submit_log` (
   `s_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '填写时间表',
   `n_id` bigint(20) NOT NULL COMMENT '问卷ID',
-  `u_id` bigint(20) NOT NULL COMMENT '用户ID',
+  `user_id` bigint(20) NOT NULL COMMENT '用户ID',
   `s_creattime` varchar(14) NOT NULL COMMENT '完成时间',
   PRIMARY KEY (`s_id`),
-  UNIQUE KEY `n_id` (`n_id`,`u_id`) USING BTREE
+  UNIQUE KEY `n_id` (`n_id`,`user_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -167,7 +167,7 @@ CREATE TABLE `task` (
 -- ----------------------------
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
-  `u_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '用户ID',
+  `user_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '用户ID',
   `u_name` varchar(100) NOT NULL COMMENT '姓名',
   `u_sex` int(1) NOT NULL COMMENT '性别',
   `u_class` varchar(255) NOT NULL COMMENT '部门',
@@ -180,8 +180,8 @@ CREATE TABLE `users` (
   `u_email` varchar(255) NOT NULL COMMENT '邮箱',
   `u_status` int(1) NOT NULL DEFAULT '0' COMMENT '用户状态（0正常，1被冻结）',
   `u_active_time` varchar(14) NOT NULL COMMENT '用户最近的活跃时间',
-  PRIMARY KEY (`u_id`),
-  KEY `u_id` (`u_id`)
+  PRIMARY KEY (`user_id`),
+  KEY `user_id` (`user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=21073 DEFAULT CHARSET=utf8 COMMENT='用户表';
 
 SET FOREIGN_KEY_CHECKS = 1;

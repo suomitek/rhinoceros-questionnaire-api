@@ -109,7 +109,7 @@ class Naire extends CI_Controller {
         $this->load->model('user_model');
         $this->config->load('settings', TRUE);
 
-        $result = $this->db->where('u_id', $user_id)->get('users')->row();
+        $result = $this->db->where('user_id', $user_id)->get('users')->row();
 
         $subject = '恭喜您！您填写的问卷已经成功提交';
         $message = '<p>尊敬的 ' . $result->u_name . '：</p>

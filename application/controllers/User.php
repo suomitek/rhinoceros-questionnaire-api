@@ -195,7 +195,7 @@ class User extends CI_Controller {
         $header = $this->input->get_request_header('Authorization', TRUE);
         list($token) = sscanf($header, 'token %s');
         if ($header != '' && jwt_helper::validate($token)) {
-            $user_id = $this->input->post_get('u_id', TRUE);
+            $user_id = $this->input->post_get('user_id', TRUE);
             $status = $this->input->post_get('status', TRUE);
             $text = $status == 1 ? '冻结' : '解冻';
             if ($this->user_model->change_user_status($user_id, $status) > 0) {
