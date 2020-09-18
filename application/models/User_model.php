@@ -94,7 +94,8 @@ class User_model extends CI_Model {
             'u_identity' => $inputData['u_identity'],
             'u_email' => $inputData['u_email'],
             'u_tel' => $inputData['u_tel'],
-            'u_password' => sha1($inputData['u_number'])
+            'u_password' => sha1($inputData['u_number']),
+			'update_time' => time(),
         );
         $this->db->where('user_id', $u_id);
         $this->db->update('users', $update_data);
