@@ -28,7 +28,7 @@ CREATE TABLE `admin` (
   `a_username` varchar(25) NOT NULL COMMENT '用户名',
   `a_password` varchar(40) NOT NULL COMMENT '密码',
   PRIMARY KEY (`admin_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='管理员表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='管理员表';
 
 -- ----------------------------
 -- Records of admin
@@ -49,7 +49,7 @@ CREATE TABLE `ads` (
   `ad_href` varchar(255) NOT NULL COMMENT '广告外链',
   `ad_target` int(1) NOT NULL COMMENT '广告打开方式，0本窗口，1新窗口',
   PRIMARY KEY (`ad_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='广告表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='广告表';
 
 -- ----------------------------
 -- Table structure for configs
@@ -61,13 +61,13 @@ CREATE TABLE `configs` (
   `config_val` text NOT NULL COMMENT '配置的值',
   `config_comments` text NOT NULL COMMENT '配置说明',
   PRIMARY KEY (`config_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of configs
 -- ----------------------------
 BEGIN;
-INSERT INTO `configs` VALUES (3, 'smtp_sending', '0', '0未在任务中，1在任务中');
+INSERT INTO `configs` VALUES (1, 'smtp_sending', '0', '0未在任务中，1在任务中');
 COMMIT;
 
 -- ----------------------------
@@ -85,7 +85,7 @@ CREATE TABLE `naire` (
   `n_options` text NOT NULL COMMENT '问卷相关配置(JSON)',
   PRIMARY KEY (`naire_id`),
   KEY `naire_id` (`naire_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8 COMMENT='问卷表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='问卷表';
 
 -- ----------------------------
 -- Table structure for options
@@ -101,7 +101,7 @@ CREATE TABLE `options` (
   `o_isaddtion` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否有附加内容',
   PRIMARY KEY (`options_id`),
   KEY `options_id` (`options_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=792 DEFAULT CHARSET=utf8 COMMENT='题目选项表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='题目选项表';
 
 -- ----------------------------
 -- Table structure for question
@@ -117,7 +117,7 @@ CREATE TABLE `question` (
   `q_description` text COMMENT '问题描述',
   PRIMARY KEY (`q_id`),
   KEY `q_id` (`q_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=168 DEFAULT CHARSET=utf8 COMMENT='题目表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='题目表';
 
 -- ----------------------------
 -- Table structure for result
@@ -182,6 +182,6 @@ CREATE TABLE `users` (
   `u_active_time` varchar(14) NOT NULL COMMENT '用户最近的活跃时间',
   PRIMARY KEY (`user_id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21073 DEFAULT CHARSET=utf8 COMMENT='用户表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户表';
 
 SET FOREIGN_KEY_CHECKS = 1;
