@@ -17,6 +17,8 @@
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
+use homestead;
+
 -- ----------------------------
 -- Table structure for admin
 -- ----------------------------
@@ -136,6 +138,7 @@ CREATE TABLE `result` (
 -- Table structure for submit_log
 -- ----------------------------
 DROP TABLE IF EXISTS `submit_log`;
+-- truncate table submit_log;
 CREATE TABLE `submit_log` (
   `s_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '填写时间表',
   `n_id` bigint(20) NOT NULL COMMENT '问卷ID',
