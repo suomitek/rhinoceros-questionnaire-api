@@ -178,13 +178,15 @@ class Naire_model extends CI_Model {
 			if ($naire['deadline'] === '' || $naire['title'] === '' || $naire['status'] === '') {
 				return array("err" => 1, "data" => "问卷(naire)必填字段不能为空");
 			}
+			$time = time();
 			$update_naire_data = array(
 				'n_deadline' => $naire['deadline'],
 				'n_title' => trim($naire['title']),
 				'n_status' => $naire['status'],
 				'n_intro' => trim($naire['intro']),
 				'n_options' => array_key_exists('options', $naire) ? trim($naire['options']) : '',
-				'n_createtime' => utils_helper::getMillisecond()
+				'n_createtime' => utils_helper::getMillisecond(),
+				'update_time' => $time,
 			);
 
 			$naire_id = $naire['naire_id'];
@@ -197,7 +199,6 @@ class Naire_model extends CI_Model {
 			$this->db->delete($del_tables);
 
 			// 遍历题目
-			$time = time();
 			foreach ($naire['topic'] as $topickey => $topicval) {
 
 				// 题目内容
