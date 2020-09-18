@@ -27,8 +27,9 @@ class Admin_model extends CI_Model {
 
     // 修改管理员密码
     public function changePwd($userid) {
-        $oldpwd = json_decode($this->input->raw_input_stream, true)['oldpwd'];
-        $newpwd = json_decode($this->input->raw_input_stream, true)['newpwd'];
+    	$inputData = json_decode($this->input->raw_input_stream, true);
+        $oldpwd = $inputData['oldpwd'];
+        $newpwd = $inputData['newpwd'];
         $where_array = array('admin_id' => $userid, 'a_password' => sha1($oldpwd));
         $query = $this->db->get_where('admin', $where_array);
         if (!$query) {

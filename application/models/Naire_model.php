@@ -106,8 +106,9 @@ class Naire_model extends CI_Model {
 	// 保存问卷
 	public function save_naire() {
 		// JSON 反序列化
-		$naire = json_decode($this->input->raw_input_stream, true)['naire'];
-		$status = json_decode($this->input->raw_input_stream, true)['status'];
+		$inputData = json_decode($this->input->raw_input_stream, true);
+		$naire = $inputData['naire'];
+		$status = $inputData['status'];
 		// create / update
 		if ($status == 'create') {
 			// 执行插入操作
@@ -516,9 +517,10 @@ class Naire_model extends CI_Model {
 //        $ss = $GLOBALS['HTTP_RAW_POST_DATA'];
 //        $ss = json_decode($ss,true);
 //        var_dump($ss);exit;
-		$n_id = json_decode($this->input->raw_input_stream, true)['naire_id'];
-		$x_id = json_decode($this->input->raw_input_stream, true)['x_id'];
-		$y_id = json_decode($this->input->raw_input_stream, true)['y_id'];
+		$inputData = json_decode($this->input->raw_input_stream, true);
+		$n_id = $inputData['naire_id'];
+		$x_id = $inputData['x_id'];
+		$y_id = $inputData['y_id'];
 
 
 		if (empty($n_id) || empty($x_id) || empty($y_id)) {
@@ -891,8 +893,9 @@ class Naire_model extends CI_Model {
 
 	// 修改问卷时间
 	public function change_time() {
-		$n_id = json_decode($this->input->raw_input_stream, true)['naire_id'];
-		$n_deadline = json_decode($this->input->raw_input_stream, true)['n_deadline'];
+		$inputData = json_decode($this->input->raw_input_stream, true);
+		$n_id = $inputData['naire_id'];
+		$n_deadline = $inputData['n_deadline'];
 		// 修改发布状态
 		$this->db->query("UPDATE naire SET n_deadline = {$n_deadline} WHERE naire_id='{$n_id}'");
 		$result = $this->db->affected_rows();

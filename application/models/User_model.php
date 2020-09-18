@@ -81,19 +81,20 @@ class User_model extends CI_Model {
 
     // 更新用户
     public function update_user() {
-        $u_id = json_decode($this->input->raw_input_stream, true)['user_id'];
+		$inputData = json_decode($this->input->raw_input_stream, true);
+        $u_id = $inputData['user_id'];
         $update_data = array(
-//            'u_major' => json_decode($this->input->raw_input_stream, true)['u_major'],
-            'u_name' => json_decode($this->input->raw_input_stream, true)['u_name'],
-            'u_sex' => json_decode($this->input->raw_input_stream, true)['u_sex'],
-            'u_class' => json_decode($this->input->raw_input_stream, true)['u_class'],
-            'u_number' => json_decode($this->input->raw_input_stream, true)['u_number'],
-            'u_birthday' => json_decode($this->input->raw_input_stream, true)['u_birthday'],
-            'u_nation' => json_decode($this->input->raw_input_stream, true)['u_nation'],
-            'u_identity' => json_decode($this->input->raw_input_stream, true)['u_identity'],
-            'u_email' => json_decode($this->input->raw_input_stream, true)['u_email'],
-            'u_tel' => json_decode($this->input->raw_input_stream, true)['u_tel'],
-            'u_password' => sha1(json_decode($this->input->raw_input_stream, true)['u_number'])
+//            'u_major' => $inputData['u_major'],
+            'u_name' => $inputData['u_name'],
+            'u_sex' => $inputData['u_sex'],
+            'u_class' => $inputData['u_class'],
+            'u_number' => $inputData['u_number'],
+            'u_birthday' => $inputData['u_birthday'],
+            'u_nation' => $inputData['u_nation'],
+            'u_identity' => $inputData['u_identity'],
+            'u_email' => $inputData['u_email'],
+            'u_tel' => $inputData['u_tel'],
+            'u_password' => sha1($inputData['u_number'])
         );
         $this->db->where('user_id', $u_id);
         $this->db->update('users', $update_data);
@@ -179,9 +180,10 @@ class User_model extends CI_Model {
     // 获取用户ID
     public function get_user_id() {
         $this->config->load('settings', TRUE);
-        $name = json_decode($this->input->raw_input_stream, true)['name'];
-        $identity = json_decode($this->input->raw_input_stream, true)['identity'];
-        $nId = json_decode($this->input->raw_input_stream, true)['naire_id'];
+        $inputData = json_decode($this->input->raw_input_stream, true);
+        $name = $inputData['name'];
+        $identity = $inputData['identity'];
+        $nId = $inputData['naire_id'];
 
         $query = $this->db->get_where('users', array('u_name' => $name, 'u_identity' => strtoupper($identity)));
         $row = $query->row_array();

@@ -151,7 +151,7 @@ class User extends CI_Controller {
             // 索引必须与导入表格中的一致
 			$inputData = json_decode($this->input->raw_input_stream, true);
             $insert_data = array(
-//                0 => json_decode($this->input->raw_input_stream, true)['u_major'],
+//                0 => $inputData['u_major'],
                 0 => $inputData['u_name'],
                 1 => $inputData['u_sex'] == 1 ? '女' : '男',
                 2 => $inputData['u_class'],
