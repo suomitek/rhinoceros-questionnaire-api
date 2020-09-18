@@ -87,7 +87,7 @@ CREATE TABLE `naire` (
   `naire_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '问卷id',
   `admin_id` bigint(20) NOT NULL COMMENT '管理员id',
   `n_createtime` bigint(20) NOT NULL COMMENT '创建时间',
-  `n_deadline` varchar(14) NOT NULL COMMENT '截止时间',
+  `n_deadline` bigint(20) NOT NULL COMMENT '截止时间',
   `n_title` varchar(255) NOT NULL COMMENT '问卷标题',
   `n_status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '发布状态',
   `n_intro` text COMMENT '问卷介绍',

@@ -126,6 +126,7 @@ class Naire_model extends CI_Model {
 			$this->db->insert('naire', $insert_naire_data);
 			$naire_id = $this->db->insert_id();
 			// 遍历题目
+			$time = time();
 			foreach ($naire['topic'] as $topickey => $topicval) {
 
 				// 题目内容
@@ -139,7 +140,8 @@ class Naire_model extends CI_Model {
 					'naire_id' => $naire_id,
 					'q_setting' => array_key_exists('setting', $topicval) ? json_encode($topicval['setting']) : '',
 					'q_isrequire' => $topicval['isRequired'] == "true" ? 1 : 0,
-					'q_description' => trim($topicval['description'])
+					'q_description' => trim($topicval['description']),
+					'create_time' => $time,
 				);
 
 				$this->db->insert('question', $insert_question_data);
@@ -158,7 +160,8 @@ class Naire_model extends CI_Model {
 							'question_id' => $question_id,
 							'o_image' => trim($optionval['image']),
 							'o_desc' => trim($optionval['desc']),
-							'o_isaddtion' => $optionval['isAddition'] == "true" ? 1 : 0
+							'o_isaddtion' => $optionval['isAddition'] == "true" ? 1 : 0,
+							'create_time' => $time,
 						);
 						$this->db->insert('options', $insert_option_data);
 						//print_r($optionval['isAddition'] == 1 ? 'true' : 'false');
@@ -194,20 +197,21 @@ class Naire_model extends CI_Model {
 			$this->db->delete($del_tables);
 
 			// 遍历题目
+			$time = time();
 			foreach ($naire['topic'] as $topickey => $topicval) {
 
 				// 题目内容
 				if ($topicval['question'] === '' || $topicval['type'] === '' || $topicval['isRequired'] === '') {
 					return array("err" => 1, "data" => '问题(question)必填字段不能为空');
 				}
-				// print_r($topicval['question']);
 				$insert_question_data = array(
 					'q_content' => trim($topicval['question']),
 					'q_type' => $topicval['type'],
 					'naire_id' => $naire_id,
 					'q_setting' => array_key_exists('setting', $topicval) ? json_encode($topicval['setting']) : '',
 					'q_isrequire' => $topicval['isRequired'] == "true" ? 1 : 0,
-					'q_description' => trim($topicval['description'])
+					'q_description' => trim($topicval['description']),
+					'create_time' => $time,
 				);
 
 				$this->db->insert('question', $insert_question_data);
@@ -226,7 +230,8 @@ class Naire_model extends CI_Model {
 							'question_id' => $question_id,
 							'o_image' => trim($optionval['image']),
 							'o_desc' => trim($optionval['desc']),
-							'o_isaddtion' => $optionval['isAddition'] == "true" ? 1 : 0
+							'o_isaddtion' => $optionval['isAddition'] == "true" ? 1 : 0,
+							'create_time' => $time,
 						);
 						$this->db->insert('options', $insert_option_data);
 						//print_r($optionval['isAddition'] == 1 ? 'true' : 'false');
@@ -259,6 +264,7 @@ class Naire_model extends CI_Model {
 
 		$values = [];
 
+		$time = time();
 		foreach ($result as $key => $val) {
 			//	[naire_id] => 12
 			//  [question_id] => 41
@@ -274,6 +280,7 @@ class Naire_model extends CI_Model {
 						'question_id' => $val['question_id'],
 						'options_id' => $o_val,
 						'o_addtion' => trim($val['o_addition']),
+						'create_time' => $time,
 					);
 				}
 			} else {
@@ -283,6 +290,7 @@ class Naire_model extends CI_Model {
 					'question_id' => $val['question_id'],
 					'options_id' => is_null($val['options_id']) ? '' : $val['options_id'],
 					'o_addtion' => $val['o_addition'],
+					'create_time' => $time,
 				);
 			}
 		}
