@@ -307,10 +307,15 @@ class Naire_model extends CI_Model {
 		$this->db->insert('submit_log', $option_data);
 		$this->db->trans_complete();
 
+		$data = array(
+			"level" => 1,
+			"info" => "您的评级为1级",
+		);
+
 		if ($this->db->trans_status() === FALSE) {
 			return array("err" => 1, "message" => '写入数据发生错误');
 		} else {
-			return array("err" => 0, "message" => '问卷提交成功');
+			return array("err" => 0, "data" => $data, "message" => '问卷提交成功');
 		}
 	}
 
