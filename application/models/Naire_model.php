@@ -319,6 +319,14 @@ class Naire_model extends CI_Model {
 		}
 	}
 
+	private function _ret($code, $ret, $msg = "") {
+		return array(
+			"err" => $code,
+			"data" => $ret,
+			"message" => $msg
+		);
+	}
+
 	// 删除问卷
 	public function del_naire() {
 		$n_id = $this->input->post_get('naire_id', TRUE);
