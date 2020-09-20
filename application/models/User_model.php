@@ -212,7 +212,6 @@ class User_model extends CI_Model {
 				"level_info" => "您的评级为1级",
             );
 
-			return array('err' => 0);
             return array('err' => 0, "data" => $data);
         } else {
             return array('err' => 1, "data" => "用户不存在");
