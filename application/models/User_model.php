@@ -213,7 +213,6 @@ class User_model extends CI_Model {
             );
 
             return array('err' => 0, "data" => $data);
-
         } else {
             return array('err' => 1, "data" => "用户不存在");
         }
