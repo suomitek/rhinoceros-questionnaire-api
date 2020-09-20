@@ -202,14 +202,14 @@ switch (ENVIRONMENT)  {
 	}
 
 	if (($_temp = realpath($system_path)) !== FALSE) {
-		$system_path = $_temp.DIRECTORY_SEPARATOR;
+		$system_path = $_temp . DIRECTORY_SEPARATOR;
 	} else {
 		// Ensure there's a trailing slash
 		$system_path = strtr(
 			rtrim($system_path, '/\\'),
 			'/\\',
-			DIRECTORY_SEPARATOR.DIRECTORY_SEPARATOR
-		).DIRECTORY_SEPARATOR;
+			DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR
+		) . DIRECTORY_SEPARATOR;
 	}
 
 	// Is the system path correct?
