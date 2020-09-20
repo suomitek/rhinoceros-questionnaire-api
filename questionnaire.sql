@@ -89,14 +89,28 @@ CREATE TABLE `naire` (
   `n_createtime` bigint(20) NOT NULL COMMENT '创建时间',
   `n_deadline` bigint(20) NOT NULL COMMENT '截止时间',
   `n_title` varchar(255) NOT NULL COMMENT '问卷标题',
+  `rating_level_id` bigint(20) NOT NULL default '0' COMMENT '评级ID',
   `n_status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '发布状态',
   `n_intro` text COMMENT '问卷介绍',
   `n_options` text NOT NULL COMMENT '问卷相关配置(JSON)',
   `status` tinyint(4) NOT NULL default '0' COMMENT '状态',
   `update_time` bigint(20) NOT NULL default '0' COMMENT '更新时间',
   PRIMARY KEY (`naire_id`),
-  KEY `naire_id` (`naire_id`)
+  KEY `n_status` (`n_status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='问卷表';
+
+DROP TABLE IF EXISTS `rating_level`;
+CREATE TABLE `rating_level` (
+  `rating_level_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '评级id',
+  `admin_id` bigint(20) NOT NULL COMMENT '管理员id',
+  `rating_name` varchar(255) NOT NULL COMMENT '评级名称',
+  `rating_intro` varchar(1024) NOT NULL default 0 COMMENT '评级介绍',
+  `status` tinyint(4) NOT NULL default '0' COMMENT '状态',
+  `create_time` bigint(20) NOT NULL default '0' COMMENT '创建时间',
+  `update_time` bigint(20) NOT NULL default '0' COMMENT '更新时间',
+  PRIMARY KEY (`rating_level_id`),
+  index `idx_st` (`status`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='评级基础表';
 
 -- ----------------------------
 -- Table structure for options
@@ -114,7 +128,7 @@ CREATE TABLE `options` (
   `create_time` bigint(20) NOT NULL default '0' COMMENT '创建时间',
   `update_time` bigint(20) NOT NULL default '0' COMMENT '更新时间',
   PRIMARY KEY (`options_id`),
-  KEY `options_id` (`options_id`)
+  KEY `status` (`status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='题目选项表';
 
 -- ----------------------------
@@ -133,7 +147,7 @@ CREATE TABLE `question` (
   `create_time` bigint(20) NOT NULL default '0' COMMENT '创建时间',
   `update_time` bigint(20) NOT NULL default '0' COMMENT '更新时间',
   PRIMARY KEY (`question_id`),
-  KEY `question_id` (`question_id`)
+  KEY `status` (`status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='题目表';
 
 -- ----------------------------
@@ -205,7 +219,7 @@ CREATE TABLE `users` (
   `create_time` bigint(20) NOT NULL default '0' COMMENT '创建时间',
   `update_time` bigint(20) NOT NULL default '0' COMMENT '更新时间',
   PRIMARY KEY (`user_id`),
-  KEY `user_id` (`user_id`)
+  KEY `u_status` (`u_status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户表';
 
 SET FOREIGN_KEY_CHECKS = 1;
