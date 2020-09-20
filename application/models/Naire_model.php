@@ -307,9 +307,10 @@ class Naire_model extends CI_Model {
 		$this->db->insert('submit_log', $option_data);
 		$this->db->trans_complete();
 
+		// TODO
 		$data = array(
 			"level" => 1,
-			"info" => "您的评级为1级",
+			"level_info" => "您的评级为1级",
 		);
 
 		if ($this->db->trans_status() === FALSE) {

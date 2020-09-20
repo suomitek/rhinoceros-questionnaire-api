@@ -203,10 +203,13 @@ class User_model extends CI_Model {
                 return array('err' => 1, "data" => "由于一段时间未参与活动，账户已被冻结，请联系管理员进行解冻！");
             }
 
+			// TODO result naire
             $data = array(
                 "user_id" => $row["user_id"],
                 "name" => $row["u_name"],
-                "isFinished" => $row_naire > 0
+                "isFinished" => $row_naire > 0,
+				"level" => 1,
+				"level_info" => "您的评级为1级",
             );
 
             return array('err' => 0, "data" => $data);
